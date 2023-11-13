@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class MainActivity extends AppCompatActivity {
 
     // Instance of DatabaseHelper
+    //test
     private DatabaseHelper dbHelper;
 
     @Override
