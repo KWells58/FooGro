@@ -13,6 +13,7 @@ public class MainActivity extends AppCompatActivity {
 
     // Instance of DatabaseHelper
     //test
+    //apples
     private DatabaseHelper dbHelper;
 
     @Override
