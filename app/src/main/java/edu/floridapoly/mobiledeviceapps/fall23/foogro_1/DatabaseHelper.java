@@ -5,6 +5,17 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.Cursor;
+import android.util.Log;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "GroceryStore.db";
@@ -18,7 +29,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         // Create tables with the updated schema
         db.execSQL(
-                "CREATE TABLE Products (" +
+                "CREATE TABLE groceryStoreItems (" +
                         "id INTEGER PRIMARY KEY," +
                         "name TEXT," +
                         "category TEXT," +
@@ -32,7 +43,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Drop older table if existed
-        db.execSQL("DROP TABLE IF EXISTS Products");
+        db.execSQL("DROP TABLE IF EXISTS groceryStoreItems");
         // Create tables again
         onCreate(db);
     }
@@ -50,13 +61,57 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.execSQL("PRAGMA foreign_keys=ON;");
         }
     }
+    // Method to get a product
+    public Cursor getProduct(int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.query("groceryStoreItems", new String[]{"id", "name", "category", "price", "storeName", "storeID"}, "id=?", new String[]{String.valueOf(id)}, null, null, null, null);
+    }
 
-    // Method to add a new product
-    public void addProduct(String name, String category, double price, String storeName, int storeID) {
-        SQLiteDatabase db = this.getWritableDatabase();
+    public Cursor searchProducts(String query) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.query("groceryStoreItems",
+                new String[]{"id", "name", "category", "price", "storeName", "storeID"},
+                "name LIKE ?",
+                new String[]{"%" + query + "%"},
+                null, null, null, null);
+    }
 
+    // Other methods for updating, deleting, and listing products added here
+    public void addProductsFromJson(Context context, String jsonString) {
+        try {
+            JSONObject jsonObject = new JSONObject(jsonString);
+            JSONArray jsonArray = jsonObject.getJSONArray("groceryStoreItems");
+
+            SQLiteDatabase db = this.getWritableDatabase();
+            db.beginTransaction();
+
+            try {
+                // Loop through the array and add products to the database
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject productObject = jsonArray.getJSONObject(i);
+
+                    String name = productObject.getString("name");
+                    String category = productObject.getString("category");
+                    double price = productObject.getDouble("price");
+                    String storeName = productObject.getString("storeName");
+                    int storeID = productObject.getInt("storeID");
+
+                    addProduct(db, name, category, price, storeName, storeID);
+                }
+
+                db.setTransactionSuccessful();
+            } finally {
+                db.endTransaction();
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.e("addProductsFromJson", "Error parsing JSON", e);
+        }
+    }
+
+    private void addProduct(SQLiteDatabase db, String name, String category, double price, String storeName, int storeID) {
         // Check if the product already exists
-        Cursor cursor = db.query("Products", new String[]{"id"}, "name = ?", new String[]{name}, null, null, null);
+        Cursor cursor = db.query("groceryStoreItems", new String[]{"id"}, "name = ?", new String[]{name}, null, null, null);
         if (cursor != null && cursor.moveToFirst()) {
             // Product exists, you can update it or skip adding
             cursor.close();
@@ -70,25 +125,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put("storeID", storeID);
 
             // Inserting Row
-            db.insert("Products", null, values);
+            db.insert("groceryStoreItems", null, values);
         }
-        db.close(); // Closing database connection
     }
 
-    // Method to get a product
-    public Cursor getProduct(int id) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        return db.query("Products", new String[]{"id", "name", "category", "price", "storeName", "storeID"}, "id=?", new String[]{String.valueOf(id)}, null, null, null, null);
-    }
-
-    public Cursor searchProducts(String query) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        return db.query("Products",
-                new String[]{"id", "name", "category", "price", "storeName", "storeID"},
-                "name LIKE ?",
-                new String[]{"%" + query + "%"},
-                null, null, null, null);
-    }
-
-    // Other methods for updating, deleting, and listing products added here
 }
