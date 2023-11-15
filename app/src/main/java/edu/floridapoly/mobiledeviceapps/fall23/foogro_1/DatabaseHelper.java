@@ -5,10 +5,11 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.Cursor;
+import android.util.Log;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "GroceryStore.db";
-    private static final int DATABASE_VERSION = 5;
+    private static final int DATABASE_VERSION = 10;
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -71,6 +72,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
             // Inserting Row
             db.insert("Products", null, values);
+            Log.d("DatabaseHelper", "Adding product: " + name);
         }
         db.close(); // Closing database connection
     }

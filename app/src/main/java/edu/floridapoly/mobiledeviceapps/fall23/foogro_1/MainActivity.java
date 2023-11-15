@@ -12,8 +12,6 @@ import androidx.appcompat.app.AppCompatActivity;
 public class MainActivity extends AppCompatActivity {
 
     // Instance of DatabaseHelper
-    //test
-    //apples
     private DatabaseHelper dbHelper;
 
     @Override
@@ -23,6 +21,11 @@ public class MainActivity extends AppCompatActivity {
 
         // Initialize DatabaseHelper
         dbHelper = new DatabaseHelper(this);
+
+        JSONDataImporter importer = new JSONDataImporter(this);
+
+        // Import data from Google Drive
+        importer.importFromGoogleDrive();
 
         // Check if first launch and add a sample product to the database
         addSampleProductToDatabase();
