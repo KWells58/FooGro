@@ -72,21 +72,27 @@ public class JSONDataImporter {
             }
         }
 
-
         @Override
         protected void onPostExecute(String json) {
             if (json != null) {
                 try {
+                    // Parse the JSON string into a JSONObject
                     JSONObject jsonObject = new JSONObject(json);
-                    JSONArray jsonArray = jsonObject.getJSONArray("groceryStoreItems");
+
+                    // Access the array inside the outer object
+                    JSONArray jsonArray = jsonObject.getJSONArray("groceryStoreItems"); // Replace "groceryStoreItems" with the actual key name
+
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject item = jsonArray.getJSONObject(i);
+
+                        // Extract data from each object in the array
                         String name = item.getString("name");
                         String category = item.getString("category");
                         double price = item.getDouble("price");
                         String storeName = item.getString("storeName");
-                        int storeID = Integer.parseInt(item.getString("storeID")); // Convert storeID to integer
+                        int storeID = item.getInt("storeID"); // Assuming storeID is an integer in the JSON
 
+                        // Add product to the database
                         dbHelper.addProduct(name, category, price, storeName, storeID);
                     }
 
@@ -97,6 +103,7 @@ public class JSONDataImporter {
                 Log.e("JSONDataImporter", "JSON String is null");
             }
         }
+
 
     }
 }
