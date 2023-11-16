@@ -20,6 +20,7 @@ import java.net.URL;
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "GroceryStore.db";
     private static final int DATABASE_VERSION = 5;
+    Context context;
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -74,6 +75,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "name LIKE ?",
                 new String[]{"%" + query + "%"},
                 null, null, null, null);
+    }
+
+    //Function searches for given item and displays results in a ListView
+    //Untested
+    public SimpleCursorAdapter listSearchedItem(String item) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String columns[] = {"name", "price", "storeName"};
+        Cursor cursor = db.query("groceryStoreItems", columns, "name LIKE ?",
+                new String[]{"%" + item + "%"}, null, null, "price", null);
+        int listviewIDs[] = new int[] {R.id.item_name, R.id.price, R.id.store};
+        SimpleCursorAdapter listAdapter = new SimpleCursorAdapter(
+                context, R.layout.item_display, cursor, columns, listviewIDs);
+        return listAdapter;
     }
 
     // Other methods for updating, deleting, and listing products added here
