@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.Cursor;
 import android.util.Log;
+import android.widget.SimpleCursorAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
