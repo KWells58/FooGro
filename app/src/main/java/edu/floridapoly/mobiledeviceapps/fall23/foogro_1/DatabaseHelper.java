@@ -86,11 +86,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public Cursor searchProducts(String query) {
         SQLiteDatabase db = this.getReadableDatabase();
         return db.query("Products",
-                new String[]{"id", "name", "category", "price", "storeName", "storeID"},
+                new String[]{"id AS _id", "name", "category", "price", "storeName", "storeID"}, // Add alias for 'id'
                 "name LIKE ?",
                 new String[]{"%" + query + "%"},
                 null, null, null, null);
     }
+
 
     // Other methods for updating, deleting, and listing products added here
 }
