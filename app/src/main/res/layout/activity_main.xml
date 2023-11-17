@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Grocery_Screen">
+    tools:context=".MainActivity">
 
     <edu.floridapoly.mobiledeviceapps.fall23.foogro_1.Navigation_Bar
         android:id="@+id/navigation_bar"
