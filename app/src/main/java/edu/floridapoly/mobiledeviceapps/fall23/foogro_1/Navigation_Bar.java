@@ -26,7 +26,6 @@ public class Navigation_Bar extends LinearLayout {
 
         Button button1 = view.findViewById(R.id.button1);
         Button button2 = view.findViewById(R.id.button2);
-        Button button3 = view.findViewById(R.id.button3);
         Button button4 = view.findViewById(R.id.button4);
 
         button1.setOnClickListener(new OnClickListener() {
