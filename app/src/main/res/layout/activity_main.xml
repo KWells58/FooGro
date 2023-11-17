@@ -13,37 +13,43 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <!-- Horizontal Scroll View to contain the buttons -->
+
+
     <TextView
         android:id="@+id/tvFeaturedStores"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Featured Stores"
+        android:layout_marginTop="324dp"
         android:fontFamily="@font/amarante"
+        android:text="Featured Stores"
         android:textSize="24sp"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tvRecommendedStores"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Recommended Stores"
+        android:layout_marginTop="96dp"
         android:fontFamily="@font/amarante"
+        android:text="Recommended Stores"
         android:textSize="24sp"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Horizontal Scroll View to contain the buttons -->
     <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintVertical_bias="0.4"
+        app:layout_constraintBottom_toTopOf="@id/navigation_bar"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/navigation_bar">
+        app:layout_constraintVertical_bias="0.251"
+        tools:layout_editor_absoluteX="0dp">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -55,11 +61,11 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:onClick="onStoreOneClicked"
-                android:foreground="?attr/selectableItemBackground"
                 android:clickable="true"
                 android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                android:onClick="onStoreOneClicked"
+                android:orientation="horizontal"
                 android:paddingEnd="25dp">
 
                 <Button
@@ -72,22 +78,21 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
                     android:layout_marginStart="8dp"
+                    android:gravity="center_vertical"
                     android:text="Label 1" />
             </LinearLayout>
-
 
 
             <!-- Store Two Button and Label -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:onClick="onStoreTwoClicked"
-                android:foreground="?attr/selectableItemBackground"
                 android:clickable="true"
                 android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                android:onClick="onStoreTwoClicked"
+                android:orientation="horizontal"
                 android:paddingEnd="25dp">
 
                 <Button
@@ -100,22 +105,21 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
                     android:layout_marginStart="8dp"
+                    android:gravity="center_vertical"
                     android:text="Label 2" />
             </LinearLayout>
-
 
 
             <!-- Store Three Button and Label -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:onClick="onStoreThreeClicked"
-                android:foreground="?attr/selectableItemBackground"
                 android:clickable="true"
                 android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                android:onClick="onStoreThreeClicked"
+                android:orientation="horizontal"
                 android:paddingEnd="25dp">
 
                 <Button
@@ -128,22 +132,21 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
                     android:layout_marginStart="8dp"
+                    android:gravity="center_vertical"
                     android:text="Label 3" />
             </LinearLayout>
-
 
 
             <!-- Store Four Button and Label -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:onClick="onStoreFourClicked"
-                android:foreground="?attr/selectableItemBackground"
                 android:clickable="true"
                 android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                android:onClick="onStoreFourClicked"
+                android:orientation="horizontal"
                 android:paddingEnd="25dp">
 
                 <Button
@@ -156,17 +159,14 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
                     android:layout_marginStart="8dp"
+                    android:gravity="center_vertical"
                     android:text="Label 4" />
             </LinearLayout>
 
 
         </LinearLayout>
     </HorizontalScrollView>
-
-
-
 
     <HorizontalScrollView
         android:layout_width="match_parent"
@@ -296,22 +296,6 @@
     </HorizontalScrollView>
 
 
-    <EditText
-        android:id="@+id/editTextText"
-        android:layout_width="351dp"
-        android:layout_height="46dp"
-        android:layout_marginStart="25dp"
-        android:layout_marginTop="112dp"
-        android:layout_marginEnd="35dp"
-        android:layout_marginBottom="573dp"
-        android:ems="10"
-        android:hint="Search"
-        android:inputType="text"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <TextView
         android:id="@+id/textView5"
         android:layout_width="wrap_content"
@@ -323,30 +307,6 @@
         android:fontFamily="@font/amarante"
         android:text="FooGro"
         android:textSize="43sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/search_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="284dp"
-        android:layout_marginTop="8dp"
-        android:text="Search"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/editTextText" />
-
-    <TextView
-        android:id="@+id/tvResults"
-        android:layout_width="247dp"
-        android:layout_height="138dp"
-        android:layout_marginStart="26dp"
-        android:layout_marginTop="175dp"
-        android:layout_marginEnd="138dp"
-        android:layout_marginBottom="418dp"
-        android:text="Query Results"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

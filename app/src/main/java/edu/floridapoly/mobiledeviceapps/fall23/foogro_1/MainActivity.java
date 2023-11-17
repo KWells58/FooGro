@@ -32,16 +32,6 @@ public class MainActivity extends AppCompatActivity {
         // Import data from Google Drive
         importer.importFromGoogleDrive();
 
-        EditText searchText = findViewById(R.id.editTextText);
-        Button searchButton = findViewById(R.id.search_button);
-
-        searchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String query = searchText.getText().toString();
-                searchProducts(query);
-            }
-        });
 
         TextView textView = findViewById(R.id.textView5);
         //get the text
@@ -63,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
         textView.setText(spannableString);
     }
 
+
+
     private void addSampleProductToDatabase() {
         // Add a product to the database HERE
         dbHelper.addProduct("Banana", "Fruit", 0.49, "Publix", 101);
@@ -73,7 +65,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void searchProducts(String query) {
-        TextView resultsView = findViewById(R.id.tvResults);
         Cursor cursor = dbHelper.searchProducts(query);
         StringBuilder results = new StringBuilder();
 
@@ -94,8 +85,6 @@ public class MainActivity extends AppCompatActivity {
             }
             cursor.close();
         }
-
-        resultsView.setText(results.toString());
     }
 
 }
