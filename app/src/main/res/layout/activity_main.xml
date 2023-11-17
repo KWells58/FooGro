@@ -14,62 +14,134 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
-        android:id="@+id/button15"
-        android:layout_width="180dp"
-        android:layout_height="120dp"
-        android:layout_marginStart="222dp"
-        android:layout_marginTop="516dp"
-        android:layout_marginEnd="9dp"
-        android:layout_marginBottom="95dp"
-        android:text="Button"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+    <!-- Horizontal Scroll View to contain the buttons -->
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintVertical_bias="0.4"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintBottom_toTopOf="@id/navigation_bar">
 
-    <Button
-        android:id="@+id/button17"
-        android:layout_width="180dp"
-        android:layout_height="120dp"
-        android:layout_marginStart="222dp"
-        android:layout_marginTop="339dp"
-        android:layout_marginEnd="9dp"
-        android:layout_marginBottom="272dp"
-        android:text="Button"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="25dp">
 
-    <Button
-        android:id="@+id/button18"
-        android:layout_width="180dp"
-        android:layout_height="120dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="339dp"
-        android:layout_marginEnd="215dp"
-        android:layout_marginBottom="272dp"
-        android:text="Button"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+            <!-- Store One Button and Label -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:onClick="onStoreOneClicked"
+                android:foreground="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:paddingEnd="25dp">
 
-    <Button
-        android:id="@+id/button20"
-        android:layout_width="180dp"
-        android:layout_height="120dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="516dp"
-        android:layout_marginEnd="215dp"
-        android:layout_marginBottom="95dp"
-        android:text="Button"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+                <Button
+                    android:id="@+id/storeOneButton"
+                    style="@style/CurvedButton"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:text="Button 1" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:layout_marginStart="8dp"
+                    android:text="Label 1" />
+            </LinearLayout>
+
+
+
+            <!-- Store Two Button and Label -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:onClick="onStoreTwoClicked"
+                android:foreground="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:paddingEnd="25dp">
+
+                <Button
+                    android:id="@+id/storeTwoButton"
+                    style="@style/CurvedButton"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:text="Button 2" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:layout_marginStart="8dp"
+                    android:text="Label 2" />
+            </LinearLayout>
+
+
+
+            <!-- Store Three Button and Label -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:onClick="onStoreThreeClicked"
+                android:foreground="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:paddingEnd="25dp">
+
+                <Button
+                    android:id="@+id/storeThreeButton"
+                    style="@style/CurvedButton"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:text="Button 3" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:layout_marginStart="8dp"
+                    android:text="Label 3" />
+            </LinearLayout>
+
+
+
+            <!-- Store Four Button and Label -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:onClick="onStoreFourClicked"
+                android:foreground="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:paddingEnd="25dp">
+
+                <Button
+                    android:id="@+id/storeFourButton"
+                    style="@style/CurvedButton"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:text="Button 4" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:layout_marginStart="8dp"
+                    android:text="Label 4" />
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </HorizontalScrollView>
+
 
     <EditText
         android:id="@+id/editTextText"
