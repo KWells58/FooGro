@@ -1,7 +1,9 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.FooGro_1" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
+        <!-- Customize your dark theme here. --><item name="colorPrimary">@color/primary_color</item>
+        <item name="colorPrimaryDark">#50B17C</item>
+        <item name="colorAccent">@color/white</item>
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
     </style>
 </resources>
