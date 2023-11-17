@@ -3,7 +3,12 @@ package edu.floridapoly.mobiledeviceapps.fall23.foogro_1;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -37,6 +42,25 @@ public class MainActivity extends AppCompatActivity {
                 searchProducts(query);
             }
         });
+
+        TextView textView = findViewById(R.id.textView5);
+        //get the text
+        String text = textView.getText().toString();
+
+        //create a spannable string with the desired styles
+        SpannableString spannableString = new SpannableString(text);
+        int fooStart = text.indexOf("Foo");
+        int fooEnd = fooStart + "Foo".length();
+
+        //set the color for "Foo" to the primary color
+        spannableString.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.primary_color)),
+                fooStart, fooEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        //Make Foo bold
+        spannableString.setSpan(new StyleSpan(Typeface.BOLD), fooStart, fooEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        //Apply the spannable string to the text view
+        textView.setText(spannableString);
     }
 
     private void addSampleProductToDatabase() {
