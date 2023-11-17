@@ -13,6 +13,29 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+    <TextView
+        android:id="@+id/tvFeaturedStores"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Featured Stores"
+        android:fontFamily="@font/amarante"
+        android:textSize="24sp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/tvRecommendedStores"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Recommended Stores"
+        android:fontFamily="@font/amarante"
+        android:textSize="24sp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- Horizontal Scroll View to contain the buttons -->
     <HorizontalScrollView
@@ -136,6 +159,136 @@
                     android:gravity="center_vertical"
                     android:layout_marginStart="8dp"
                     android:text="Label 4" />
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </HorizontalScrollView>
+
+
+
+
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintVertical_bias="0.7"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/navigation_bar">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="25dp">
+
+            <!-- Store One Button and Label -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:onClick="onStoreFiveClicked"
+                android:foreground="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:paddingEnd="25dp">
+
+                <Button
+                    android:id="@+id/storeFiveButton"
+                    style="@style/CurvedButton"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:text="Button 5" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:layout_marginStart="8dp"
+                    android:text="Label 5" />
+            </LinearLayout>
+
+
+
+            <!-- Store Two Button and Label -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:onClick="onStoreSixClicked"
+                android:foreground="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:paddingEnd="25dp">
+
+                <Button
+                    android:id="@+id/storeSixButton"
+                    style="@style/CurvedButton"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:text="Button 6" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:layout_marginStart="8dp"
+                    android:text="Label 6" />
+            </LinearLayout>
+
+
+
+            <!-- Store Three Button and Label -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:onClick="onStoreSevenClicked"
+                android:foreground="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:paddingEnd="25dp">
+
+                <Button
+                    android:id="@+id/storeSevenButton"
+                    style="@style/CurvedButton"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:text="Button 7" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:layout_marginStart="8dp"
+                    android:text="Label 7" />
+            </LinearLayout>
+
+
+
+            <!-- Store Four Button and Label -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:onClick="onStoreEightClicked"
+                android:foreground="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:paddingEnd="25dp">
+
+                <Button
+                    android:id="@+id/storeEightButton"
+                    style="@style/CurvedButton"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:text="Button 8" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:layout_marginStart="8dp"
+                    android:text="Label 8" />
             </LinearLayout>
 
 
