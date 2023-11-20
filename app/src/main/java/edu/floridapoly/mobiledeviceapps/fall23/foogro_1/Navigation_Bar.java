@@ -26,6 +26,7 @@ public class Navigation_Bar extends LinearLayout {
 
         Button button1 = view.findViewById(R.id.button1);
         Button button2 = view.findViewById(R.id.button2);
+        Button button3 = view.findViewById(R.id.button3);
         Button button4 = view.findViewById(R.id.button4);
 
         button1.setOnClickListener(new OnClickListener() {
@@ -42,6 +43,14 @@ public class Navigation_Bar extends LinearLayout {
             public void onClick(View v) {
                 // Replace with the desired action for Button
                 Intent intent = new Intent(context, Item_Search_Screen.class);
+                context.startActivity(intent);
+            }
+        });
+        button3.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Replace with the desired action for Button
+                Intent intent = new Intent(context, User_List_Screen.class);
                 context.startActivity(intent);
             }
         });
