@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/addItemName"
+            android:layout_width="90dp"
+            android:layout_height="wrap_content"
+            android:text="Item Name: "
+            android:textSize="16dp" />
+
+        <EditText
+            android:id="@+id/itemNameET"
+            android:layout_width="250dp"
+            android:layout_height="50dp"
+            android:hint="Enter item name" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/addItemCategory"
+            android:layout_width="90dp"
+            android:layout_height="wrap_content"
+            android:text="Category: "
+            android:textSize="16dp" />
+
+        <EditText
+            android:id="@+id/itemCategoryET"
+            android:layout_width="250dp"
+            android:layout_height="50dp"
+            android:hint="Enter item category" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/addItemPrice"
+            android:layout_width="90dp"
+            android:layout_height="wrap_content"
+            android:text="Item Price: "
+            android:textSize="16dp" />
+
+        <EditText
+            android:id="@+id/itemPriceET"
+            android:layout_width="250dp"
+            android:layout_height="50dp"
+            android:hint="Enter item price" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/addItemStore"
+            android:layout_width="90dp"
+            android:layout_height="wrap_content"
+            android:text="Store Name: "
+            android:textSize="16dp" />
+
+        <EditText
+            android:id="@+id/itemStoreNameET"
+            android:layout_width="250dp"
+            android:layout_height="50dp"
+            android:hint="Enter item store name" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/addItemStoreID"
+            android:layout_width="90dp"
+            android:layout_height="wrap_content"
+            android:text="Store ID: "
+            android:textSize="16dp" />
+
+        <EditText
+            android:id="@+id/itemStoreIdET"
+            android:layout_width="250dp"
+            android:layout_height="50dp"
+            android:hint="Enter store ID" />
+
+    </LinearLayout>
+
+</LinearLayout>
