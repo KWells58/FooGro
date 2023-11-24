@@ -124,7 +124,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    private void addProduct(SQLiteDatabase db, String name, String category, double price, String storeName, int storeID) {
+    public void addProduct(SQLiteDatabase db, String name, String category, double price, String storeName, int storeID) {
         // Check if the product already exists
         Cursor cursor = db.query("groceryStoreItems", new String[]{"id"}, "name = ?", new String[]{name}, null, null, null);
         if (cursor != null && cursor.moveToFirst()) {
