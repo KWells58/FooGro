@@ -1,6 +1,8 @@
 package edu.floridapoly.mobiledeviceapps.fall23.foogro_1;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
@@ -58,6 +60,17 @@ public class Item_Search_Screen extends AppCompatActivity {
                                 fromColumns,
                                 toViews,
                                 0);
+
+                            searchResults.setOnItemClickListener((parent, view, position, id) -> {
+                            // Handle item click, e.g., open the item details screen
+                            Cursor clickedItemCursor = (Cursor) parent.getItemAtPosition(position);
+                            String itemId = clickedItemCursor.getString(clickedItemCursor.getColumnIndexOrThrow("_id"));
+
+                            // Start the ItemDetailsActivity and pass necessary data
+                            Intent intent = new Intent(context, ItemDetailsActivity.class);
+                            intent.putExtra("itemId", itemId);
+                            startActivity(intent);
+                        });
 
                         runOnUiThread(() -> searchResults.setAdapter(adapter));
                     }
