@@ -36,6 +36,8 @@
         <activity
             android:name=".MainActivity"
             android:exported="true" />
+        <activity android:name=".ItemDetailsActivity"
+            android:exported="true" />
         <activity
             android:name=".SplashScreenActivity"
             android:exported="true">

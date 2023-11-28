@@ -62,14 +62,19 @@ public class Item_Search_Screen extends AppCompatActivity {
                                 0);
 
                             searchResults.setOnItemClickListener((parent, view, position, id) -> {
-                            // Handle item click, e.g., open the item details screen
-                            Cursor clickedItemCursor = (Cursor) parent.getItemAtPosition(position);
-                            String itemId = clickedItemCursor.getString(clickedItemCursor.getColumnIndexOrThrow("_id"));
+                                // Handle item click, e.g., open the item details screen
+                                Cursor clickedItemCursor = (Cursor) parent.getItemAtPosition(position);
 
-                            // Start the ItemDetailsActivity and pass necessary data
-                            Intent intent = new Intent(context, ItemDetailsActivity.class);
-                            intent.putExtra("itemId", itemId);
-                            startActivity(intent);
+                                if (clickedItemCursor != null && clickedItemCursor.moveToPosition(position)) {
+                                    // Move the cursor to the correct position
+
+                                    String itemId = clickedItemCursor.getString(clickedItemCursor.getColumnIndexOrThrow("_id"));
+
+                                    // Start the ItemDetailsActivity and pass necessary data
+                                    Intent intent = new Intent(context, ItemDetailsActivity.class);
+                                    intent.putExtra("itemId", itemId);
+                                    startActivity(intent);
+                                }
                         });
 
                         runOnUiThread(() -> searchResults.setAdapter(adapter));

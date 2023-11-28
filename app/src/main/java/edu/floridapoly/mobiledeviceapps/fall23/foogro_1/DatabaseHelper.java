@@ -2,6 +2,7 @@ package edu.floridapoly.mobiledeviceapps.fall23.foogro_1;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.Cursor;
@@ -94,4 +95,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
     // Other methods for updating, deleting, and listing products added here
+
+    // Method to get prices from other stores for a given product
+    public Cursor getStorePrices(int productId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.query("Products",
+                new String[]{"storeName", "price"},
+                "id=? AND storeID<>?",
+                new String[]{String.valueOf(productId), "0"}, // Assuming 0 is a default/invalid store ID
+                null, null, null, null);
+    }
+
 }
