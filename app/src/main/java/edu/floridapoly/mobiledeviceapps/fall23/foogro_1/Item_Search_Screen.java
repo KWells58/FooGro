@@ -17,14 +17,18 @@ public class Item_Search_Screen extends AppCompatActivity {
     private DatabaseHelper dbHelper;
     private ListView searchResults;
     private Context context; // To hold the context reference
+    private String storeName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_search_screen);
-
         context = this; // Store the context
         initializeViews();
+
+        //Retrieve the store name from the intent extras
+        storeName = getIntent().getStringExtra("storeName");
+
     }
 
     private void initializeViews() {
@@ -35,21 +39,32 @@ public class Item_Search_Screen extends AppCompatActivity {
         Button backButton = findViewById(R.id.backButton);
         EditText searchEditText = findViewById(R.id.searchEditText);
 
-        searchButton.setOnClickListener(view -> performSearch(searchEditText.getText().toString()));
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view){
+                performSearch(storeName, searchEditText.getText().toString());
+                }
+            });
         backButton.setOnClickListener(view -> finish());
     }
 
-    private void performSearch(String query) {
+    private void performSearch(String storeName, String query) {
         if (!query.isEmpty()) {
             showToast("Searching for: " + query);
-
             // Run database operation in a background thread to avoid blocking the UI
             new Thread(() -> {
                 try {
-                    Cursor cursor = dbHelper.searchProducts(query);
+                    Cursor cursor;
+                    if(storeName != null) {
+                        // If storeName is provided, filter the results
+                        cursor = dbHelper.searchProductsByStore(query, storeName);
+                    } else {
+                        //If storeName is not provided, then whatever
+                        cursor = dbHelper.searchProducts(query);
+                    }
+
+
                     if (cursor != null) {
-                        // Assuming you have a layout file 'list_item_layout.xml' with a TextView 'text1'
-                        // to display product names. Adjust the layout and TextView IDs as per your actual layout.
                         String[] fromColumns = new String[]{"name"}; // column name to display
                         int[] toViews = new int[]{android.R.id.text1}; // The TextView in list_item_layout.xml
 
@@ -67,12 +82,13 @@ public class Item_Search_Screen extends AppCompatActivity {
 
                                 if (clickedItemCursor != null && clickedItemCursor.moveToPosition(position)) {
                                     // Move the cursor to the correct position
-
                                     String itemId = clickedItemCursor.getString(clickedItemCursor.getColumnIndexOrThrow("_id"));
-
                                     // Start the ItemDetailsActivity and pass necessary data
                                     Intent intent = new Intent(context, ItemDetailsActivity.class);
                                     intent.putExtra("itemId", itemId);
+
+                                    // Add an extra flag to indicate its from the standard search
+                                    intent.putExtra("fromStandardSearch", true);
                                     startActivity(intent);
                                 }
                         });
@@ -87,6 +103,20 @@ public class Item_Search_Screen extends AppCompatActivity {
         } else {
             showToast("Please enter a search query.");
         }
+    }
+
+// Method to extract category information from the query
+    private String extractCategoryFromQuery(String query) {
+        // Example: Check if the query contains "category:" followed by a category name
+        String marker = "category:";
+        int markerIndex = query.indexOf(marker);
+
+        if (markerIndex != -1) {
+            int categoryStartIndex = markerIndex + marker.length();
+            return query.substring(categoryStartIndex).trim();
+        }
+
+        return null; // No category marker found in the query
     }
 
     private void showToast(String message) {

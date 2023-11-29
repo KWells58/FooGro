@@ -106,4 +106,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 null, null, null, null);
     }
 
+    public Cursor searchProductsByStore(String query, String storeName) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String[] columns = {"id AS _id", "name"};
+        String selection = "name LIKE ? AND storeName = ?";
+        String[] selectionArgs = new String[]{"%" + query + "%", storeName};
+        String orderBy = "name ASC";
+
+        return db.query("products", columns, selection, selectionArgs, null, null, orderBy);
+    }
+
 }

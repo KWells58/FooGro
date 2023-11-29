@@ -51,6 +51,33 @@ public class MainActivity extends AppCompatActivity {
 
         //Apply the spannable string to the text view
         textView.setText(spannableString);
+
+
+        Button buttonStore1 = findViewById(R.id.storeOneButton);
+        Button buttonStore2 = findViewById(R.id.storeTwoButton);
+        Button buttonStore3 = findViewById(R.id.storeThreeButton);
+        Button buttonStore4 = findViewById(R.id.storeFourButton);
+
+        Button buttonStore5 = findViewById(R.id.storeFiveButton);
+        Button buttonStore6 = findViewById(R.id.storeSixButton);
+        Button buttonStore7 = findViewById(R.id.storeSevenButton);
+        Button buttonStore8 = findViewById(R.id.storeEightButton);
+
+        // Click listeners for the buttons
+        buttonStore1.setOnClickListener(view ->openItemSearchScreen("Publix"));
+        buttonStore2.setOnClickListener(view ->openItemSearchScreen("Walmart"));
+        buttonStore3.setOnClickListener(view ->openItemSearchScreen("Target"));
+        buttonStore4.setOnClickListener(view ->openItemSearchScreen("Kroger"));
+        buttonStore5.setOnClickListener(view ->openItemSearchScreen("Store 1"));
+        buttonStore6.setOnClickListener(view ->openItemSearchScreen("Store 1"));
+        buttonStore7.setOnClickListener(view ->openItemSearchScreen("Store 1"));
+        buttonStore8.setOnClickListener(view ->openItemSearchScreen("Store 1"));
+    }
+
+    private void openItemSearchScreen(String storeName) {
+        Intent intent = new Intent(this, Item_Search_Screen.class);
+        intent.putExtra("storeName", storeName);
+        startActivity(intent);
     }
 
 
