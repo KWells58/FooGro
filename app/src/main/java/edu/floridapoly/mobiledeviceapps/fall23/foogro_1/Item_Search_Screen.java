@@ -55,16 +55,20 @@ public class Item_Search_Screen extends AppCompatActivity {
             new Thread(() -> {
                 try {
                     Cursor cursor;
-                    if(storeName != null) {
+                    if (storeName != null) {
                         // If storeName is provided, filter the results
                         cursor = dbHelper.searchProductsByStore(query, storeName);
                     } else {
-                        //If storeName is not provided, then whatever
+                        // If storeName is not provided, then whatever
                         cursor = dbHelper.searchProducts(query);
                     }
 
-
                     if (cursor != null) {
+                        // Check if there are duplicates, and limit the results to one item
+                        if (cursor.getCount() > 1) {
+                            cursor.moveToFirst();
+                        }
+
                         String[] fromColumns = new String[]{"name"}; // column name to display
                         int[] toViews = new int[]{android.R.id.text1}; // The TextView in list_item_layout.xml
 
@@ -76,21 +80,21 @@ public class Item_Search_Screen extends AppCompatActivity {
                                 toViews,
                                 0);
 
-                            searchResults.setOnItemClickListener((parent, view, position, id) -> {
-                                // Handle item click, e.g., open the item details screen
-                                Cursor clickedItemCursor = (Cursor) parent.getItemAtPosition(position);
+                        searchResults.setOnItemClickListener((parent, view, position, id) -> {
+                            // Handle item click, e.g., open the item details screen
+                            Cursor clickedItemCursor = (Cursor) parent.getItemAtPosition(position);
 
-                                if (clickedItemCursor != null && clickedItemCursor.moveToPosition(position)) {
-                                    // Move the cursor to the correct position
-                                    String itemId = clickedItemCursor.getString(clickedItemCursor.getColumnIndexOrThrow("_id"));
-                                    // Start the ItemDetailsActivity and pass necessary data
-                                    Intent intent = new Intent(context, ItemDetailsActivity.class);
-                                    intent.putExtra("itemId", itemId);
+                            if (clickedItemCursor != null && clickedItemCursor.moveToPosition(position)) {
+                                // Move the cursor to the correct position
+                                String itemId = clickedItemCursor.getString(clickedItemCursor.getColumnIndexOrThrow("_id"));
+                                // Start the ItemDetailsActivity and pass necessary data
+                                Intent intent = new Intent(context, ItemDetailsActivity.class);
+                                intent.putExtra("itemId", itemId);
 
-                                    // Add an extra flag to indicate its from the standard search
-                                    intent.putExtra("fromStandardSearch", true);
-                                    startActivity(intent);
-                                }
+                                // Add an extra flag to indicate it's from the standard search
+                                intent.putExtra("fromStandardSearch", true);
+                                startActivity(intent);
+                            }
                         });
 
                         runOnUiThread(() -> searchResults.setAdapter(adapter));
@@ -105,7 +109,8 @@ public class Item_Search_Screen extends AppCompatActivity {
         }
     }
 
-// Method to extract category information from the query
+
+    // Method to extract category information from the query
     private String extractCategoryFromQuery(String query) {
         // Example: Check if the query contains "category:" followed by a category name
         String marker = "category:";

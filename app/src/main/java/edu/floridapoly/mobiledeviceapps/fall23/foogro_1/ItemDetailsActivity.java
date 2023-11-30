@@ -3,10 +3,14 @@ package edu.floridapoly.mobiledeviceapps.fall23.foogro_1;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.util.ArrayList;
 
 public class ItemDetailsActivity extends AppCompatActivity {
 
@@ -30,43 +34,44 @@ public class ItemDetailsActivity extends AppCompatActivity {
             TextView itemPriceTextView = findViewById(R.id.itemPriceTextView);
             itemPriceTextView.setText("Price: $" + itemPrice);
 
-            if(fromStandardSearch) {
+            if (fromStandardSearch) {
                 // Fetch and display prices from other stores
                 displayPricesFromOtherStores(itemName, dbHelper);
-                cursor.close();
             }
         }
     }
 
     private void displayPricesFromOtherStores(String itemName, DatabaseHelper dbHelper) {
-        LinearLayout pricesLayout = findViewById(R.id.pricesLayout);
+        ListView priceListView = findViewById(R.id.priceListView);
 
         // Query the database for the same product from different stores
         Cursor storesCursor = dbHelper.searchProducts(itemName);
-        if (storesCursor != null && storesCursor.moveToFirst()) {
-            do {
+        if (storesCursor != null) {
+            ArrayList<StoreItem> storeItems = new ArrayList<>();
+
+            while (storesCursor.moveToNext()) {
                 String storeName = storesCursor.getString(storesCursor.getColumnIndexOrThrow("storeName"));
                 double storePrice = storesCursor.getDouble(storesCursor.getColumnIndexOrThrow("price"));
 
-                // Create a TextView to display store name and price
-                TextView storeTextView = new TextView(this);
-                storeTextView.setText(storeName + ": $" + storePrice);
+                storeItems.add(new StoreItem(storeName, storePrice));
+            }
 
-                // Create an Add to Cart button for each store
-                Button addToCartButton = new Button(this);
-                addToCartButton.setText("Add to Cart");
-                addToCartButton.setOnClickListener(view -> {
-                    // Add logic to add the item to the cart for this store
-                    // You may want to store the selected store and item details in your cart
-                });
+            // Create an ArrayAdapter to bind data to the ListView
+            StoreItemAdapter adapter = new StoreItemAdapter(this, storeItems);
 
-                // Add the TextView and Button to the layout
-                pricesLayout.addView(storeTextView);
-                pricesLayout.addView(addToCartButton);
+            priceListView.setAdapter(adapter);
 
-            } while (storesCursor.moveToNext());
+            // Set a click listener for the ListView
+            priceListView.setOnItemClickListener((parent, view, position, id) -> {
+                StoreItem selectedStoreItem = (StoreItem) parent.getItemAtPosition(position);
+                if (selectedStoreItem != null) {
+                    // Handle adding the item to the cart for the selected store
+                    // You can access selectedStoreItem.getStoreName() and selectedStoreItem.getStorePrice()
+                }
+            });
 
-            storesCursor.close();
+            storesCursor.close();  // Close the cursor after you've done processing it
         }
     }
+
 }

@@ -24,20 +24,12 @@
         android:layout_marginTop="8dp"
         android:layout_marginStart="16dp"/>
 
-    <LinearLayout
-        android:id="@+id/pricesLayout"
+    <ListView
+        android:id="@+id/priceListView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_below="@id/itemPriceTextView"
-        android:layout_marginTop="16dp"/>
-
-    <Button
-        android:id="@+id/addToCartButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Add to Cart"
-        android:layout_below="@id/pricesLayout"
         android:layout_marginTop="16dp"
-        android:layout_centerHorizontal="true"/>
+        android:divider="@android:color/darker_gray"
+        android:dividerHeight="0.5dp"/>
 </RelativeLayout>
