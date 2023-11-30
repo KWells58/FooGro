@@ -10,7 +10,7 @@ import android.util.Log;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "GroceryStore.db";
-    private static final int DATABASE_VERSION = 13;
+    private static final int DATABASE_VERSION = 16;
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -20,7 +20,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         // Create tables with the updated schema
         db.execSQL(
-                "CREATE TABLE Products (" +
+                "CREATE TABLE IF NOT EXISTS Products (" +
                         "id INTEGER PRIMARY KEY," +
                         "name TEXT," +
                         "category TEXT," +
@@ -70,7 +70,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // Inserting Row
         db.insert("Products", null, values);
         Log.d("DatabaseHelper", "Adding product: " + name);
-
         db.close(); // Closing database connection
 }
 
@@ -85,7 +84,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String[] columns = {"id AS _id", "name", "category", "price", "storeName", "storeID"};
         String selection = "name LIKE ?";
         String[] selectionArgs = new String[]{"%" + query + "%"};
-        String orderBy = "name ASC";
+        String orderBy = "price ASC, name ASC";
 
         Cursor cursor = db.query("Products", columns, selection, selectionArgs, null, null, orderBy);
 
@@ -101,35 +100,30 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
     // Other methods for updating, deleting, and listing products added here
-    // Method to get prices from other stores for a given product
-    public Cursor getStorePrices(int productId) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        return db.query("Products",
-                new String[]{"storeName", "price"},
-                "id=? AND storeID<>?",
-                new String[]{String.valueOf(productId), "0"}, // Assuming 0 is a default/invalid store ID
-                null, null, null, null);
-    }
-
-    public Cursor searchProductsByStore(String query, String storeName) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        String[] columns = {"id AS _id", "name"};
-        String selection = "name LIKE ? AND storeName = ?";
-        String[] selectionArgs = new String[]{"%" + query + "%", storeName};
-        String orderBy = "name ASC";
-
-        return db.query("products", columns, selection, selectionArgs, null, null, orderBy);
-    }
-
-
-    public Cursor searchProductsByName(String name) {
+    public Cursor searchSingleProduct(String query, String storeName) {
         SQLiteDatabase db = this.getReadableDatabase();
         String[] columns = {"id AS _id", "name", "category", "price", "storeName", "storeID"};
         String selection = "name LIKE ?";
-        String[] selectionArgs = new String[]{"%" + name + "%"};
+        String[] selectionArgs = new String[]{"%" + query + "%"};
         String orderBy = "name ASC";
 
-        return db.query("Products", columns, selection, selectionArgs, null, null, orderBy);
+        Cursor cursor;
+
+        if (storeName != null) {
+            // If storeName is provided, filter the results
+            selection += " AND storeName = ?";
+            selectionArgs = new String[]{"%" + query + "%", storeName};
+        }
+
+        cursor = db.query("Products", columns, selection, selectionArgs, null, null, orderBy, "1");
+
+        // Log the results for debugging
+        if (cursor != null) {
+            int count = cursor.getCount();
+            Log.d("DatabaseHelper", "searchSingleProduct - Query: " + query + ", Result Count: " + count);
+        }
+
+        return cursor;
     }
 
 

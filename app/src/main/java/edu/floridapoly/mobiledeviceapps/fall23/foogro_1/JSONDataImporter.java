@@ -1,6 +1,8 @@
 package edu.floridapoly.mobiledeviceapps.fall23.foogro_1;
 
 import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.util.Log;
 import org.json.JSONArray;
@@ -86,6 +88,7 @@ public class JSONDataImporter {
                         JSONObject item = jsonArray.getJSONObject(i);
 
                         // Extract data from each object in the array
+                        int id = item.getInt("id");
                         String name = item.getString("name");
                         String category = item.getString("category");
                         double price = item.getDouble("price");
@@ -93,7 +96,14 @@ public class JSONDataImporter {
                         int storeID = item.getInt("storeID"); // Assuming storeID is an integer in the JSON
 
                         // Add product to the database
-                        dbHelper.addProduct(name, category, price, storeName, storeID);
+                        Cursor cursor = dbHelper.getProduct(id);
+                        if(cursor != null && cursor.moveToFirst()) {
+                            //Product exists you can upade it or skip adding\
+                            cursor.close();
+                        } else {
+                            // Products does not exist, add new product
+                            dbHelper.addProduct(name, category, price, storeName, storeID);
+                        }
                     }
 
                 } catch (Exception e) {

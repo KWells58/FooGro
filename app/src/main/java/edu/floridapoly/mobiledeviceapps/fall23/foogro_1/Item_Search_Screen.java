@@ -57,18 +57,17 @@ public class Item_Search_Screen extends AppCompatActivity {
                     Cursor cursor;
                     if (storeName != null) {
                         // If storeName is provided, filter the results
-                        cursor = dbHelper.searchProductsByStore(query, storeName);
+                        cursor = dbHelper.searchSingleProduct(query, storeName);
                     } else {
                         // If storeName is not provided, then whatever
-                        cursor = dbHelper.searchProducts(query);
+                        cursor = dbHelper.searchSingleProduct(query, null);
                     }
 
                     if (cursor != null) {
-                        // Check if there are duplicates, and limit the results to one item
-                        if (cursor.getCount() > 1) {
-                            cursor.moveToFirst();
-                        }
+                        // Move the cursor to the first position
+                        cursor.moveToFirst();
 
+                        // Continue with the rest of the adapter setup
                         String[] fromColumns = new String[]{"name"}; // column name to display
                         int[] toViews = new int[]{android.R.id.text1}; // The TextView in list_item_layout.xml
 
@@ -107,21 +106,6 @@ public class Item_Search_Screen extends AppCompatActivity {
         } else {
             showToast("Please enter a search query.");
         }
-    }
-
-
-    // Method to extract category information from the query
-    private String extractCategoryFromQuery(String query) {
-        // Example: Check if the query contains "category:" followed by a category name
-        String marker = "category:";
-        int markerIndex = query.indexOf(marker);
-
-        if (markerIndex != -1) {
-            int categoryStartIndex = markerIndex + marker.length();
-            return query.substring(categoryStartIndex).trim();
-        }
-
-        return null; // No category marker found in the query
     }
 
     private void showToast(String message) {
