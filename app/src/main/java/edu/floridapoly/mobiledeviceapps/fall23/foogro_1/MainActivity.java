@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void addSampleProductToDatabase() {
         // Add a product to the database HERE
-        dbHelper.addProduct("Banana", "Fruit", 0.49, "Publix", 101);
+        dbHelper.addProduct(190, "Banana", "Fruit", 0.49, "Publix", 101);
     }
 
     private void showToast(String message) {

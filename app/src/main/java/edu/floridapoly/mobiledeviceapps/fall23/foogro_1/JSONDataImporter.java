@@ -100,9 +100,11 @@ public class JSONDataImporter {
                         if(cursor != null && cursor.moveToFirst()) {
                             //Product exists you can upade it or skip adding\
                             cursor.close();
+                            Log.d("DatabaseHelper", "Product already added: " + id);
                         } else {
                             // Products does not exist, add new product
-                            dbHelper.addProduct(name, category, price, storeName, storeID);
+                            dbHelper.addProduct(id,name, category, price, storeName, storeID);
+                            Log.d("DatabaseHelper", "Added Product: " + name);
                         }
                     }
 

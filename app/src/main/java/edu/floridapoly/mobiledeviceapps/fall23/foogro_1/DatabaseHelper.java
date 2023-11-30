@@ -54,13 +54,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // Method to add a new product
-    public void addProduct(String name, String category, double price, String storeName, int storeID) {
+    public void addProduct(int id, String name, String category, double price, String storeName, int storeID) {
         SQLiteDatabase db = this.getWritableDatabase();
 
 
         ContentValues values = new ContentValues();
 
-
+        values.put("id", id);
         values.put("name", name);
         values.put("category", category);
         values.put("price", price);
@@ -105,7 +105,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String[] columns = {"id AS _id", "name", "category", "price", "storeName", "storeID"};
         String selection = "name LIKE ?";
         String[] selectionArgs = new String[]{"%" + query + "%"};
-        String orderBy = "name ASC";
+        String orderBy = "price ASC, name ASC";
 
         Cursor cursor;
 
