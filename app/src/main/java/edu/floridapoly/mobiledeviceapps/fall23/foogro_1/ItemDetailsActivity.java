@@ -1,7 +1,10 @@
 package edu.floridapoly.mobiledeviceapps.fall23.foogro_1;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,6 +27,9 @@ public class ItemDetailsActivity extends AppCompatActivity {
 
         itemNameTextView = findViewById(R.id.itemNameTextView); // Initialize the TextView
         itemNameTextView.setText(storeName); // Set the store name to the TextView
+
+        // Call the method to set up the Add to Cart button
+
 
         Cursor cursor = dbHelper.getProduct(Integer.parseInt(itemId));
         if (cursor != null && cursor.moveToFirst()) {
@@ -83,6 +89,7 @@ public class ItemDetailsActivity extends AppCompatActivity {
             }
         }
     }
+
 
 
 
