@@ -7,32 +7,48 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
-
 import java.util.ArrayList;
 
 public class StoreItemAdapter extends ArrayAdapter<StoreItem> {
+
+    // ViewHolder static inner class for better performance in ListView.
+    static class ViewHolder {
+        TextView storeItemNameTextView;
+        TextView storeItemPriceTextView;
+        TextView storeItemDescriptionTextView;
+        Button storeItemAddToCartButton;
+    }
+
     public StoreItemAdapter(Context context, ArrayList<StoreItem> storeItems) {
         super(context, 0, storeItems);
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        StoreItem storeItem = getItem(position);
-
+        ViewHolder viewHolder;
+        // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item_layout, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item_store, parent, false);
+            viewHolder = new ViewHolder();
+            viewHolder.storeItemNameTextView = convertView.findViewById(R.id.storeItemNameTextView);
+            viewHolder.storeItemPriceTextView = convertView.findViewById(R.id.storeItemPriceTextView);
+            viewHolder.storeItemDescriptionTextView = convertView.findViewById(R.id.storeItemDescriptionTextView);
+            viewHolder.storeItemAddToCartButton = convertView.findViewById(R.id.storeItemAddToCartButton);
+            convertView.setTag(viewHolder);
+        } else {
+            viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        TextView storeTextView = convertView.findViewById(R.id.storeTextView);
-        Button addToCartButton = convertView.findViewById(R.id.addToCartButton);
-
+        StoreItem storeItem = getItem(position);
         if (storeItem != null) {
-            storeTextView.setText(storeItem.getStoreName() + ": $" + storeItem.getStorePrice());
+            viewHolder.storeItemNameTextView.setText(storeItem.getStoreName());
+            viewHolder.storeItemPriceTextView.setText(String.format("$%.2f", storeItem.getStorePrice()));
+            viewHolder.storeItemDescriptionTextView.setText(storeItem.getDescription());
         }
 
-        // Set a click listener for the Add to Cart button
-        addToCartButton.setOnClickListener(view -> {
+        viewHolder.storeItemAddToCartButton.setOnClickListener(view -> {
             // Handle adding the item to the cart for the selected store
+            // Implement your logic to add to cart here
         });
 
         return convertView;

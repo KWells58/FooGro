@@ -78,36 +78,31 @@ public class JSONDataImporter {
         protected void onPostExecute(String json) {
             if (json != null) {
                 try {
-                    // Parse the JSON string into a JSONObject
                     JSONObject jsonObject = new JSONObject(json);
-
-                    // Access the array inside the outer object
-                    JSONArray jsonArray = jsonObject.getJSONArray("groceryStoreItems"); // Replace "groceryStoreItems" with the actual key name
+                    JSONArray jsonArray = jsonObject.getJSONArray("groceryStoreItems"); // Use the correct key name
 
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject item = jsonArray.getJSONObject(i);
 
-                        // Extract data from each object in the array
                         int id = item.getInt("id");
                         String name = item.getString("name");
                         String category = item.getString("category");
                         double price = item.getDouble("price");
                         String storeName = item.getString("storeName");
-                        int storeID = item.getInt("storeID"); // Assuming storeID is an integer in the JSON
+                        int storeID = item.getInt("storeID");
+                        // Extract the description field from the JSON object
+                        String description = item.optString("description", ""); // Use optString to handle if the key is missing
 
-                        // Add product to the database
                         Cursor cursor = dbHelper.getProduct(id);
-                        if(cursor != null && cursor.moveToFirst()) {
-                            //Product exists you can upade it or skip adding\
+                        if (cursor != null && cursor.moveToFirst()) {
                             cursor.close();
                             Log.d("DatabaseHelper", "Product already added: " + id);
                         } else {
-                            // Products does not exist, add new product
-                            dbHelper.addProduct(id,name, category, price, storeName, storeID);
+                            // Include the description in the addProduct call
+                            dbHelper.addProduct(id, name, category, price, storeName, storeID, description);
                             Log.d("DatabaseHelper", "Added Product: " + name);
                         }
                     }
-
                 } catch (Exception e) {
                     Log.e("JSON Parsing/DB Insertion Error", "Error occurred", e);
                 }
@@ -115,7 +110,5 @@ public class JSONDataImporter {
                 Log.e("JSONDataImporter", "JSON String is null");
             }
         }
-
-
     }
 }

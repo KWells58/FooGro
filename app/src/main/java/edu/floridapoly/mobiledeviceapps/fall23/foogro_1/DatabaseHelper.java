@@ -10,7 +10,7 @@ import android.util.Log;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "GroceryStore.db";
-    private static final int DATABASE_VERSION = 16;
+    private static final int DATABASE_VERSION = 19;
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -18,7 +18,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        // Create tables with the updated schema
         db.execSQL(
                 "CREATE TABLE IF NOT EXISTS Products (" +
                         "id INTEGER PRIMARY KEY," +
@@ -26,7 +25,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         "category TEXT," +
                         "price REAL," +
                         "storeName TEXT," +
-                        "storeID INTEGER)"
+                        "storeID INTEGER," +
+                        "description TEXT)"
         );
         // Add more table creation statements as needed
     }
@@ -54,7 +54,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // Method to add a new product
-    public void addProduct(int id, String name, String category, double price, String storeName, int storeID) {
+    public void addProduct(int id, String name, String category, double price, String storeName, int storeID, String description) {
         SQLiteDatabase db = this.getWritableDatabase();
 
 
@@ -66,6 +66,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put("price", price);
         values.put("storeName", storeName);
         values.put("storeID", storeID);
+        values.put("description", description);
 
         // Inserting Row
         db.insert("Products", null, values);
@@ -76,12 +77,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // Method to get a product
     public Cursor getProduct(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
-        return db.query("Products", new String[]{"id", "name", "category", "price", "storeName", "storeID"}, "id=?", new String[]{String.valueOf(id)}, null, null, null, null);
+        return db.query("Products", new String[]{"id", "name", "category", "price", "storeName", "storeID","description"}, "id=?", new String[]{String.valueOf(id)}, null, null, null, null);
     }
 
     public Cursor searchProducts(String query) {
         SQLiteDatabase db = this.getReadableDatabase();
-        String[] columns = {"id AS _id", "name", "category", "price", "storeName", "storeID"};
+        String[] columns = {"id AS _id", "name", "category", "price", "storeName", "storeID","description"};
         String selection = "name LIKE ?";
         String[] selectionArgs = new String[]{"%" + query + "%"};
         String orderBy = "price ASC, name ASC";
@@ -102,7 +103,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // Other methods for updating, deleting, and listing products added here
     public Cursor searchSingleProduct(String query, String storeName) {
         SQLiteDatabase db = this.getReadableDatabase();
-        String[] columns = {"id AS _id", "name", "category", "price", "storeName", "storeID"};
+        String[] columns = {"id AS _id", "name", "category", "price", "storeName", "storeID","description"};
         String selection = "name LIKE ?";
         String[] selectionArgs = new String[]{"%" + query + "%"};
         String orderBy = "price ASC, name ASC";
@@ -125,6 +126,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return cursor;
     }
+    public void addToCart(int productId, String productName, double productPrice, int quantity) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("productId", productId);
+        values.put("productName", productName);
+        values.put("price", productPrice);
+        values.put("quantity", quantity);
+
+        // Inserting Row into Cart table (you need to create this table in your database)
+        db.insert("Cart", null, values);
+        Log.d("DatabaseHelper", "Added to cart: " + productName);
+        db.close(); // Closing database connection
+    }
+
 
 
 }

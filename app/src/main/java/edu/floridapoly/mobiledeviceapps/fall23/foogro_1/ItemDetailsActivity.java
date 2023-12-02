@@ -2,10 +2,6 @@ package edu.floridapoly.mobiledeviceapps.fall23.foogro_1;
 
 import android.database.Cursor;
 import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,6 +23,8 @@ public class ItemDetailsActivity extends AppCompatActivity {
         if (cursor != null && cursor.moveToFirst()) {
             String itemName = cursor.getString(cursor.getColumnIndexOrThrow("name"));
             double itemPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("price"));
+            // Assume you have added a "description" column to your Products table.
+            String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
 
             TextView itemNameTextView = findViewById(R.id.itemNameTextView);
             itemNameTextView.setText(itemName);
@@ -35,13 +33,17 @@ public class ItemDetailsActivity extends AppCompatActivity {
             itemPriceTextView.setText("Price: $" + itemPrice);
 
             if (fromStandardSearch) {
-                // Fetch and display prices from other stores
-                displayPricesFromOtherStores(itemName, dbHelper);
+                // Fetch and display prices from other stores along with descriptions
+                displayPricesFromOtherStores(itemName, dbHelper, description);
             }
+        }
+        // Ensure the cursor is closed after use
+        if(cursor != null && !cursor.isClosed()) {
+            cursor.close();
         }
     }
 
-    private void displayPricesFromOtherStores(String itemName, DatabaseHelper dbHelper) {
+    private void displayPricesFromOtherStores(String itemName, DatabaseHelper dbHelper, String itemDescription) {
         ListView priceListView = findViewById(R.id.priceListView);
 
         // Query the database for the same product from different stores
@@ -52,26 +54,16 @@ public class ItemDetailsActivity extends AppCompatActivity {
             while (storesCursor.moveToNext()) {
                 String storeName = storesCursor.getString(storesCursor.getColumnIndexOrThrow("storeName"));
                 double storePrice = storesCursor.getDouble(storesCursor.getColumnIndexOrThrow("price"));
-
-                storeItems.add(new StoreItem(storeName, storePrice));
+                // The description can be the same for all StoreItems if it's generic to the product
+                storeItems.add(new StoreItem(storeName, storePrice, itemDescription));
             }
 
-            // Create an ArrayAdapter to bind data to the ListView
             StoreItemAdapter adapter = new StoreItemAdapter(this, storeItems);
-
             priceListView.setAdapter(adapter);
 
-            // Set a click listener for the ListView
-            priceListView.setOnItemClickListener((parent, view, position, id) -> {
-                StoreItem selectedStoreItem = (StoreItem) parent.getItemAtPosition(position);
-                if (selectedStoreItem != null) {
-                    // Handle adding the item to the cart for the selected store
-                    // You can access selectedStoreItem.getStoreName() and selectedStoreItem.getStorePrice()
-                }
-            });
+            // Remove the item click listener if the Add to Cart functionality is handled within the adapter.
 
             storesCursor.close();  // Close the cursor after you've done processing it
         }
     }
-
 }
