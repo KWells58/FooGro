@@ -17,6 +17,7 @@ public class ItemDetailsActivity extends AppCompatActivity {
 
         DatabaseHelper dbHelper = new DatabaseHelper(this);
         String itemId = getIntent().getStringExtra("itemId");
+        String storeName = getIntent().getStringExtra("storeName");
         boolean fromStandardSearch = getIntent().getBooleanExtra("fromStandardSearch", false);
 
         Cursor cursor = dbHelper.getProduct(Integer.parseInt(itemId));
@@ -32,7 +33,7 @@ public class ItemDetailsActivity extends AppCompatActivity {
 
             if (fromStandardSearch) {
                 // Fetch and display prices from other stores along with descriptions
-                displayPricesFromOtherStores(itemName, dbHelper, description);
+                displayPricesFromOtherStores(itemName, storeName, dbHelper, description);
             }
         }
         // Ensure the cursor is closed after use
@@ -41,7 +42,28 @@ public class ItemDetailsActivity extends AppCompatActivity {
         }
     }
 
-    private void displayPricesFromOtherStores(String itemName, DatabaseHelper dbHelper, String itemDescription) {
+
+    private void displayPricesFromOtherStores(String itemName, String storeName, DatabaseHelper dbHelper, String itemDescription) {
+        ListView priceListView = findViewById(R.id.priceListView);
+        ArrayList<StoreItem> storeItems = new ArrayList<>();
+        Cursor storesCursor = null;
+        try {
+            // Query the database for the same product from the specified store
+            storesCursor = dbHelper.searchProductInStore(itemName, storeName);
+            while (storesCursor != null && storesCursor.moveToNext()) {
+                double storePrice = storesCursor.getDouble(storesCursor.getColumnIndexOrThrow("price"));
+                String description = storesCursor.getString(storesCursor.getColumnIndexOrThrow("description"));
+                storeItems.add(new StoreItem(storeName, storePrice, description));
+            }
+            StoreItemAdapter adapter = new StoreItemAdapter(this, storeItems);
+            priceListView.setAdapter(adapter);
+        } finally {
+            if (storesCursor != null) {
+                storesCursor.close();
+            }
+        }
+    }
+    private void displayPricesFromAllStores(String itemName, DatabaseHelper dbHelper, String itemDescription) {
         ListView priceListView = findViewById(R.id.priceListView);
         ArrayList<StoreItem> storeItems = new ArrayList<>();
         Cursor storesCursor = null;
@@ -62,6 +84,7 @@ public class ItemDetailsActivity extends AppCompatActivity {
             }
         }
     }
+
 
 
 }

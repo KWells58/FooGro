@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -28,6 +29,7 @@ public class Item_Search_Screen extends AppCompatActivity {
 
         //Retrieve the store name from the intent extras
         storeName = getIntent().getStringExtra("storeName");
+        Log.d("ItemSearchScreen", "Store selected: " + storeName);
 
     }
 
@@ -50,63 +52,46 @@ public class Item_Search_Screen extends AppCompatActivity {
 
     private void performSearch(String storeName, String query) {
         if (!query.isEmpty()) {
-            showToast("Searching for: " + query);
+            showToast("Searching for: " + query + " in " + storeName);
             // Run database operation in a background thread to avoid blocking the UI
             new Thread(() -> {
-                try {
-                    Cursor cursor;
-                    if (storeName != null) {
-                        // If storeName is provided, filter the results
-                        cursor = dbHelper.searchSingleProduct(query, storeName);
-                    } else {
-                        // If storeName is not provided, then whatever
-                        cursor = dbHelper.searchSingleProduct(query, null);
-                    }
+                Cursor cursor = dbHelper.searchSingleProduct(query, storeName);
 
-                    if (cursor != null) {
-                        // Move the cursor to the first position
-                        cursor.moveToFirst();
+                if (cursor != null) {
+                    // Continue with the rest of the adapter setup
+                    String[] fromColumns = new String[]{"name"}; // column name to display
+                    int[] toViews = new int[]{android.R.id.text1}; // The TextView in simple_list_item_1.xml
 
-                        // Continue with the rest of the adapter setup
-                        String[] fromColumns = new String[]{"name"}; // column name to display
-                        int[] toViews = new int[]{android.R.id.text1}; // The TextView in list_item_layout.xml
+                    SimpleCursorAdapter adapter = new SimpleCursorAdapter(
+                            context,
+                            android.R.layout.simple_list_item_1, // Layout for individual rows
+                            cursor,
+                            fromColumns,
+                            toViews,
+                            0);
 
-                        SimpleCursorAdapter adapter = new SimpleCursorAdapter(
-                                context,
-                                android.R.layout.simple_list_item_1, // Layout for individual rows
-                                cursor,
-                                fromColumns,
-                                toViews,
-                                0);
+                    searchResults.setOnItemClickListener((parent, view, position, id) -> {
+                        Cursor clickedItemCursor = (Cursor) parent.getItemAtPosition(position);
+                        if (clickedItemCursor != null && clickedItemCursor.moveToPosition(position)) {
+                            String itemId = clickedItemCursor.getString(clickedItemCursor.getColumnIndexOrThrow("_id"));
+                            Intent intent = new Intent(context, ItemDetailsActivity.class);
+                            intent.putExtra("itemId", itemId);
+                            intent.putExtra("storeName", storeName);
+                            intent.putExtra("fromStandardSearch", true);
+                            startActivity(intent);
+                        }
+                    });
 
-                        searchResults.setOnItemClickListener((parent, view, position, id) -> {
-                            // Handle item click, e.g., open the item details screen
-                            Cursor clickedItemCursor = (Cursor) parent.getItemAtPosition(position);
-
-                            if (clickedItemCursor != null && clickedItemCursor.moveToPosition(position)) {
-                                // Move the cursor to the correct position
-                                String itemId = clickedItemCursor.getString(clickedItemCursor.getColumnIndexOrThrow("_id"));
-                                // Start the ItemDetailsActivity and pass necessary data
-                                Intent intent = new Intent(context, ItemDetailsActivity.class);
-                                intent.putExtra("itemId", itemId);
-
-                                // Add an extra flag to indicate it's from the standard search
-                                intent.putExtra("fromStandardSearch", true);
-                                startActivity(intent);
-                            }
-                        });
-
-                        runOnUiThread(() -> searchResults.setAdapter(adapter));
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    runOnUiThread(() -> showToast("Error: " + e.getMessage()));
+                    runOnUiThread(() -> searchResults.setAdapter(adapter));
+                } else {
+                    runOnUiThread(() -> showToast("No results found"));
                 }
             }).start();
         } else {
             showToast("Please enter a search query.");
         }
     }
+
 
     private void showToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
