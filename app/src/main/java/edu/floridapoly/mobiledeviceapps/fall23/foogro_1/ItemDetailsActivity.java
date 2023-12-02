@@ -10,6 +10,8 @@ import java.util.ArrayList;
 
 public class ItemDetailsActivity extends AppCompatActivity {
 
+    private TextView itemNameTextView; // TextView for displaying the store name
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,19 +22,16 @@ public class ItemDetailsActivity extends AppCompatActivity {
         String storeName = getIntent().getStringExtra("storeName");
         boolean fromStandardSearch = getIntent().getBooleanExtra("fromStandardSearch", false);
 
+        itemNameTextView = findViewById(R.id.itemNameTextView); // Initialize the TextView
+        itemNameTextView.setText(storeName); // Set the store name to the TextView
+
         Cursor cursor = dbHelper.getProduct(Integer.parseInt(itemId));
         if (cursor != null && cursor.moveToFirst()) {
             String itemName = cursor.getString(cursor.getColumnIndexOrThrow("name"));
             double itemPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("price"));
-            // Assume you have added a "description" column to your Products table.
             String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
 
-
-
-
-
             if (fromStandardSearch) {
-                // Fetch and display prices from other stores along with descriptions
                 displayPricesFromOtherStores(itemName, storeName, dbHelper, description);
             }
         }
