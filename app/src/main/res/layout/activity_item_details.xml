@@ -9,27 +9,18 @@
         android:id="@+id/itemNameTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Item Name"
+        android:text="Store Name"
         android:textSize="18sp"
         android:layout_marginTop="16dp"
         android:layout_marginStart="16dp"/>
 
-    <TextView
-        android:id="@+id/itemPriceTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Price: $0.00"
-        android:textSize="16sp"
-        android:layout_below="@id/itemNameTextView"
-        android:layout_marginTop="8dp"
-        android:layout_marginStart="16dp"/>
 
     <ListView
         android:id="@+id/priceListView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/itemPriceTextView"
-        android:layout_marginTop="16dp"
-        android:divider="@android:color/darker_gray"
-        android:dividerHeight="0.5dp"/>
+        android:layout_below="@id/itemNameTextView"
+    android:layout_marginTop="16dp"
+    android:divider="@android:color/darker_gray"
+    android:dividerHeight="0.5dp"/>
 </RelativeLayout>

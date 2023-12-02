@@ -26,11 +26,9 @@ public class ItemDetailsActivity extends AppCompatActivity {
             // Assume you have added a "description" column to your Products table.
             String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
 
-            TextView itemNameTextView = findViewById(R.id.itemNameTextView);
-            itemNameTextView.setText(itemName);
 
-            TextView itemPriceTextView = findViewById(R.id.itemPriceTextView);
-            itemPriceTextView.setText("Price: $" + itemPrice);
+
+
 
             if (fromStandardSearch) {
                 // Fetch and display prices from other stores along with descriptions
@@ -45,25 +43,25 @@ public class ItemDetailsActivity extends AppCompatActivity {
 
     private void displayPricesFromOtherStores(String itemName, DatabaseHelper dbHelper, String itemDescription) {
         ListView priceListView = findViewById(R.id.priceListView);
-
-        // Query the database for the same product from different stores
-        Cursor storesCursor = dbHelper.searchProducts(itemName);
-        if (storesCursor != null) {
-            ArrayList<StoreItem> storeItems = new ArrayList<>();
-
-            while (storesCursor.moveToNext()) {
+        ArrayList<StoreItem> storeItems = new ArrayList<>();
+        Cursor storesCursor = null;
+        try {
+            // Query the database for the same product from different stores
+            storesCursor = dbHelper.searchProducts(itemName);
+            while (storesCursor != null && storesCursor.moveToNext()) {
                 String storeName = storesCursor.getString(storesCursor.getColumnIndexOrThrow("storeName"));
                 double storePrice = storesCursor.getDouble(storesCursor.getColumnIndexOrThrow("price"));
-                // The description can be the same for all StoreItems if it's generic to the product
-                storeItems.add(new StoreItem(storeName, storePrice, itemDescription));
+                String description = storesCursor.getString(storesCursor.getColumnIndexOrThrow("description"));
+                storeItems.add(new StoreItem(storeName, storePrice, description));
             }
-
             StoreItemAdapter adapter = new StoreItemAdapter(this, storeItems);
             priceListView.setAdapter(adapter);
-
-            // Remove the item click listener if the Add to Cart functionality is handled within the adapter.
-
-            storesCursor.close();  // Close the cursor after you've done processing it
+        } finally {
+            if (storesCursor != null) {
+                storesCursor.close();
+            }
         }
     }
+
+
 }
