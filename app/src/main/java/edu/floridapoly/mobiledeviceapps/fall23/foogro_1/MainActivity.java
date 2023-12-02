@@ -17,6 +17,8 @@ import android.widget.Toast;
 import android.content.Intent;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
 
     // Instance of DatabaseHelper
@@ -75,10 +77,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void openItemSearchScreen(String storeName) {
+        // Intent should lead to Item_Search_Screen, not ItemDetailsActivity
         Intent intent = new Intent(this, Item_Search_Screen.class);
-        intent.putExtra("storeName", storeName);
+        intent.putExtra("STORE_NAME", storeName);
         startActivity(intent);
     }
+
+
 
 
 

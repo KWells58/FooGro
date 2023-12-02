@@ -1,67 +1,64 @@
 package edu.floridapoly.mobiledeviceapps.fall23.foogro_1;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.widget.ListView;
-import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 
 public class ItemDetailsActivity extends AppCompatActivity {
 
+    // Declare dbHelper and priceListView as class members
+    private DatabaseHelper dbHelper;
+    private ListView priceListView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_details);
 
-        DatabaseHelper dbHelper = new DatabaseHelper(this);
-        String itemId = getIntent().getStringExtra("itemId");
-        boolean fromStandardSearch = getIntent().getBooleanExtra("fromStandardSearch", false);
+        // Initialize dbHelper and priceListView
+        dbHelper = new DatabaseHelper(this);
+        priceListView = findViewById(R.id.priceListView);
 
-        Cursor cursor = dbHelper.getProduct(Integer.parseInt(itemId));
-        if (cursor != null && cursor.moveToFirst()) {
-            String itemName = cursor.getString(cursor.getColumnIndexOrThrow("name"));
-            double itemPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("price"));
-            // Assume you have added a "description" column to your Products table.
-            String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
+        Intent intent = getIntent();
+        // Retrieve the storeName and itemId from the intent
+        String storeName = intent.getStringExtra("STORE_NAME");
+        String itemId = intent.getStringExtra("itemId");
 
-
-
-
-
-            if (fromStandardSearch) {
-                // Fetch and display prices from other stores along with descriptions
-                displayPricesFromOtherStores(itemName, dbHelper, description);
-            }
-        }
-        // Ensure the cursor is closed after use
-        if(cursor != null && !cursor.isClosed()) {
-            cursor.close();
+        if (itemId != null && storeName != null) {
+            // Fetch and display the prices for the specific item from the selected store
+            displayPricesForItem(storeName, itemId);
         }
     }
 
-    private void displayPricesFromOtherStores(String itemName, DatabaseHelper dbHelper, String itemDescription) {
-        ListView priceListView = findViewById(R.id.priceListView);
-        ArrayList<StoreItem> storeItems = new ArrayList<>();
-        Cursor storesCursor = null;
+    private void displayPricesForItem(String storeName, String itemId) {
         try {
-            // Query the database for the same product from different stores
-            storesCursor = dbHelper.searchProducts(itemName);
-            while (storesCursor != null && storesCursor.moveToNext()) {
-                String storeName = storesCursor.getString(storesCursor.getColumnIndexOrThrow("storeName"));
-                double storePrice = storesCursor.getDouble(storesCursor.getColumnIndexOrThrow("price"));
-                String description = storesCursor.getString(storesCursor.getColumnIndexOrThrow("description"));
-                storeItems.add(new StoreItem(storeName, storePrice, description));
+            int id = Integer.parseInt(itemId); // Convert itemId to integer
+            Cursor cursor = dbHelper.getProduct(id);
+            ArrayList<StoreItem> storeItems = new ArrayList<>();
+
+            if (cursor != null && cursor.moveToFirst()) {
+                String retrievedStoreName = cursor.getString(cursor.getColumnIndexOrThrow("storeName"));
+                if (retrievedStoreName.equals(storeName)) {
+                    do {
+                        String itemName = cursor.getString(cursor.getColumnIndexOrThrow("name"));
+                        double price = cursor.getDouble(cursor.getColumnIndexOrThrow("price"));
+                        String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
+                        storeItems.add(new StoreItem(itemName, price, description));
+                    } while (cursor.moveToNext());
+                }
+                cursor.close();
             }
+
+            // Set up the adapter and assign it to the ListView
             StoreItemAdapter adapter = new StoreItemAdapter(this, storeItems);
             priceListView.setAdapter(adapter);
-        } finally {
-            if (storesCursor != null) {
-                storesCursor.close();
-            }
+        } catch (NumberFormatException e) {
+            // Handle the exception
+            e.printStackTrace();
         }
     }
-
-
 }

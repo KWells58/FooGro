@@ -24,12 +24,15 @@ public class Item_Search_Screen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_search_screen);
         context = this; // Store the context
+        dbHelper = new DatabaseHelper(this);
+
+        // Retrieve the store name from the intent extras
+        storeName = getIntent().getStringExtra("STORE_NAME");
+
+        // Initialize the views and set up the UI
         initializeViews();
-
-        //Retrieve the store name from the intent extras
-        storeName = getIntent().getStringExtra("storeName");
-
     }
+
 
     private void initializeViews() {
         dbHelper = new DatabaseHelper(Item_Search_Screen.this);

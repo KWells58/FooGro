@@ -8,6 +8,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.Cursor;
 import android.util.Log;
 
+import java.util.ArrayList;
+
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "GroceryStore.db";
     private static final int DATABASE_VERSION = 1;
@@ -139,6 +141,42 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Log.d("DatabaseHelper", "Added to cart: " + productName);
         db.close(); // Closing database connection
     }
+    public ArrayList<String> getProductsForStore(String storeName) {
+        ArrayList<String> productNames = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
+
+        try {
+            String query = "SELECT name FROM Products WHERE storeName = ?";
+            cursor = db.rawQuery(query, new String[]{storeName});
+
+            // Check if the 'name' column exists
+            int nameColumnIndex = cursor.getColumnIndex("name");
+            if (nameColumnIndex == -1) {
+                // The column doesn't exist, handle accordingly
+                Log.e("DatabaseHelper", "Column 'name' doesn't exist in the table Products.");
+                return productNames; // Return the empty list
+            }
+
+            // Iterate over the results and add them to the list
+            if (cursor.moveToFirst()) {
+                do {
+                    String name = cursor.getString(nameColumnIndex);
+                    productNames.add(name);
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            Log.e("DatabaseHelper", "Error while trying to get products from database", e);
+        } finally {
+            if (cursor != null && !cursor.isClosed()) {
+                cursor.close();
+            }
+            db.close(); // Close the database to avoid memory leaks
+        }
+
+        return productNames;
+    }
+
 
 
 
