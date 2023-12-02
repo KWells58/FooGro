@@ -1,6 +1,7 @@
 package edu.floridapoly.mobiledeviceapps.fall23.foogro_1;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,13 +45,27 @@ public class StoreItemAdapter extends ArrayAdapter<StoreItem> {
             viewHolder.storeItemNameTextView.setText(storeItem.getStoreName());
             viewHolder.storeItemPriceTextView.setText(String.format("$%.2f", storeItem.getStorePrice()));
             viewHolder.storeItemDescriptionTextView.setText(storeItem.getDescription());
+
+            viewHolder.storeItemAddToCartButton.setOnClickListener(view -> {
+                addToCart(storeItem.getId(), storeItem.getStoreName(), storeItem.getStorePrice());
+            });
         }
 
-        viewHolder.storeItemAddToCartButton.setOnClickListener(view -> {
-            // Handle adding the item to the cart for the selected store
-            // Implement your logic to add to cart here
-        });
-
         return convertView;
+    }
+
+    private void addToCart(int itemId, String storeName, double price) {
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("CartPreferences", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        // Construct a unique key for this item. Assuming itemId is unique for each item.
+        String itemKey = "cartItem_" + itemId;
+
+        // Save item details. Consider using JSON to save more complex data.
+        editor.putString(itemKey + "_storeName", storeName);
+        editor.putFloat(itemKey + "_price", (float) price);
+
+        // Commit changes to SharedPreferences
+        editor.apply();
     }
 }

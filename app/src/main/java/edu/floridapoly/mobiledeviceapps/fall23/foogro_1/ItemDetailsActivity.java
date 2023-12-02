@@ -28,9 +28,6 @@ public class ItemDetailsActivity extends AppCompatActivity {
         itemNameTextView = findViewById(R.id.itemNameTextView); // Initialize the TextView
         itemNameTextView.setText(storeName); // Set the store name to the TextView
 
-        // Call the method to set up the Add to Cart button
-
-
         Cursor cursor = dbHelper.getProduct(Integer.parseInt(itemId));
         if (cursor != null && cursor.moveToFirst()) {
             String itemName = cursor.getString(cursor.getColumnIndexOrThrow("name"));
@@ -53,12 +50,12 @@ public class ItemDetailsActivity extends AppCompatActivity {
         ArrayList<StoreItem> storeItems = new ArrayList<>();
         Cursor storesCursor = null;
         try {
-            // Query the database for the same product from the specified store
             storesCursor = dbHelper.searchProductInStore(itemName, storeName);
             while (storesCursor != null && storesCursor.moveToNext()) {
+                int itemId = storesCursor.getInt(storesCursor.getColumnIndexOrThrow("_id")); // Retrieve the item ID
                 double storePrice = storesCursor.getDouble(storesCursor.getColumnIndexOrThrow("price"));
                 String description = storesCursor.getString(storesCursor.getColumnIndexOrThrow("description"));
-                storeItems.add(new StoreItem(storeName, storePrice, description));
+                storeItems.add(new StoreItem(itemId, storeName, storePrice, description)); // Use the ID here
             }
             StoreItemAdapter adapter = new StoreItemAdapter(this, storeItems);
             priceListView.setAdapter(adapter);
@@ -68,18 +65,19 @@ public class ItemDetailsActivity extends AppCompatActivity {
             }
         }
     }
+
     private void displayPricesFromAllStores(String itemName, DatabaseHelper dbHelper, String itemDescription) {
         ListView priceListView = findViewById(R.id.priceListView);
         ArrayList<StoreItem> storeItems = new ArrayList<>();
         Cursor storesCursor = null;
         try {
-            // Query the database for the same product from different stores
             storesCursor = dbHelper.searchProducts(itemName);
             while (storesCursor != null && storesCursor.moveToNext()) {
+                int itemId = storesCursor.getInt(storesCursor.getColumnIndexOrThrow("_id")); // Retrieve the item ID
                 String storeName = storesCursor.getString(storesCursor.getColumnIndexOrThrow("storeName"));
                 double storePrice = storesCursor.getDouble(storesCursor.getColumnIndexOrThrow("price"));
                 String description = storesCursor.getString(storesCursor.getColumnIndexOrThrow("description"));
-                storeItems.add(new StoreItem(storeName, storePrice, description));
+                storeItems.add(new StoreItem(itemId, storeName, storePrice, description)); // Use the ID here
             }
             StoreItemAdapter adapter = new StoreItemAdapter(this, storeItems);
             priceListView.setAdapter(adapter);
@@ -89,8 +87,4 @@ public class ItemDetailsActivity extends AppCompatActivity {
             }
         }
     }
-
-
-
-
 }

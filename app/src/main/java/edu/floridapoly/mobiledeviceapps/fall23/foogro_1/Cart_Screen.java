@@ -1,10 +1,10 @@
 package edu.floridapoly.mobiledeviceapps.fall23.foogro_1;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.widget.TextView;
+import android.widget.ListView;
+import androidx.appcompat.app.AppCompatActivity;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Cart_Screen extends AppCompatActivity {
 
@@ -13,14 +13,19 @@ public class Cart_Screen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart_screen);
 
-        SharedPreferences sharedPreferences = getSharedPreferences("CartPreferences", MODE_PRIVATE);
-        String itemId = sharedPreferences.getString("itemId", "");
-        String storeName = sharedPreferences.getString("storeName", "");
-        // Retrieve other details as stored
+        // Initialize the ListView
+        ListView cartListView = findViewById(R.id.cartListView);
 
-        // Update UI with these details
-        TextView itemNameTextView = findViewById(R.id.itemName1); // Replace with your TextView's ID
-        itemNameTextView.setText(storeName); // Example of setting store name
-        // Update other UI elements as needed
+        // Create a list of CartItem objects (replace this with your actual data)
+        List<CartItem> cartItems = new ArrayList<>();
+        cartItems.add(new CartItem("Item 1", 10.00, "Supermarket 1"));
+        cartItems.add(new CartItem("Item 2", 15.50, "Store A"));
+        // Add more cart items as needed
+
+        // Create and set the CartItemAdapter
+        CartItemAdapter cartItemAdapter = new CartItemAdapter(this, cartItems);
+        cartListView.setAdapter(cartItemAdapter);
     }
 }
+
+
