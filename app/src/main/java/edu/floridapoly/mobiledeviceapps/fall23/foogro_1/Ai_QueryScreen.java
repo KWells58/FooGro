@@ -80,5 +80,5 @@ public class Ai_QueryScreen extends AppCompatActivity {
         // Parse the response and display recipes in the UI
     }
 
-    // Other methods as neede
+    // Other methods as needed
 }
