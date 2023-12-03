@@ -43,6 +43,11 @@ public class ItemDetailsActivity extends AppCompatActivity {
             cursor.close();
         }
     }
+    public void openCartScreen() {
+        Intent intent = new Intent(this, Cart_Screen.class);
+        startActivity(intent);
+    }
+
 
 
     private void displayPricesFromOtherStores(String itemName, String storeName, DatabaseHelper dbHelper, String itemDescription) {

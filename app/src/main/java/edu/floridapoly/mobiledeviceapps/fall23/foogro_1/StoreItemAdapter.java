@@ -1,6 +1,7 @@
 package edu.floridapoly.mobiledeviceapps.fall23.foogro_1;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +13,6 @@ import java.util.ArrayList;
 
 public class StoreItemAdapter extends ArrayAdapter<StoreItem> {
 
-    // ViewHolder static inner class for better performance in ListView.
     static class ViewHolder {
         TextView storeItemNameTextView;
         TextView storeItemPriceTextView;
@@ -27,7 +27,6 @@ public class StoreItemAdapter extends ArrayAdapter<StoreItem> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder;
-        // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item_store, parent, false);
             viewHolder = new ViewHolder();
@@ -47,25 +46,26 @@ public class StoreItemAdapter extends ArrayAdapter<StoreItem> {
             viewHolder.storeItemDescriptionTextView.setText(storeItem.getDescription());
 
             viewHolder.storeItemAddToCartButton.setOnClickListener(view -> {
-                addToCart(storeItem.getId(), storeItem.getStoreName(), storeItem.getStorePrice());
+                addToCart(storeItem); // Pass the storeItem object directly
+
+                if (getContext() instanceof ItemDetailsActivity) {
+                    ((ItemDetailsActivity) getContext()).openCartScreen();
+                }
             });
         }
 
         return convertView;
     }
 
-    private void addToCart(int itemId, String storeName, double price) {
+    private void addToCart(StoreItem storeItem) {
         SharedPreferences sharedPreferences = getContext().getSharedPreferences("CartPreferences", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
-        // Construct a unique key for this item. Assuming itemId is unique for each item.
-        String itemKey = "cartItem_" + itemId;
+        String itemKey = "cartItem_" + storeItem.getId();
 
-        // Save item details. Consider using JSON to save more complex data.
-        editor.putString(itemKey + "_storeName", storeName);
-        editor.putFloat(itemKey + "_price", (float) price);
+        editor.putString(itemKey + "_storeName", storeItem.getStoreName());
+        editor.putFloat(itemKey + "_price", (float) storeItem.getStorePrice());
 
-        // Commit changes to SharedPreferences
         editor.apply();
     }
 }
