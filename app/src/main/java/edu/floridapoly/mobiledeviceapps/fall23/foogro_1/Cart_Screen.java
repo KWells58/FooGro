@@ -78,7 +78,7 @@ public class Cart_Screen extends AppCompatActivity {
                 int itemId = Integer.parseInt(entry.getKey().split("_")[1]);
 
                 // Check if the item was removed (skip it in that case)
-                if (sharedPreferences.contains("cartItem_" + itemId + "_storeName")) {
+                if (sharedPreferences.contains("cartItem_" + itemId + "_itemName")) {
                     String storeName = (String) entry.getValue();
                     String itemName = sharedPreferences.getString("cartItem_" + itemId + "_itemName", "Unknown Item");
 

@@ -35,6 +35,9 @@ public class ItemDetailsActivity extends AppCompatActivity {
             String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
 
             if (fromStandardSearch) {
+                displayPricesFromAllStores(itemName,dbHelper, description);
+            }
+            else {
                 displayPricesFromOtherStores(itemName, storeName, dbHelper, description);
             }
         }
@@ -60,7 +63,7 @@ public class ItemDetailsActivity extends AppCompatActivity {
                 int itemId = storesCursor.getInt(storesCursor.getColumnIndexOrThrow("_id")); // Retrieve the item ID
                 double storePrice = storesCursor.getDouble(storesCursor.getColumnIndexOrThrow("price"));
                 String description = storesCursor.getString(storesCursor.getColumnIndexOrThrow("description"));
-                storeItems.add(new StoreItem(itemId, storeName,itemName, storePrice, description)); // Use the ID here
+                storeItems.add(new StoreItem(itemId, itemName,storeName, storePrice, description)); // Use the ID here
             }
             StoreItemAdapter adapter = new StoreItemAdapter(this, storeItems);
             priceListView.setAdapter(adapter);
@@ -82,7 +85,7 @@ public class ItemDetailsActivity extends AppCompatActivity {
                 String storeName = storesCursor.getString(storesCursor.getColumnIndexOrThrow("storeName"));
                 double storePrice = storesCursor.getDouble(storesCursor.getColumnIndexOrThrow("price"));
                 String description = storesCursor.getString(storesCursor.getColumnIndexOrThrow("description"));
-                storeItems.add(new StoreItem(itemId, storeName,itemName, storePrice, description)); // Use the ID here
+                storeItems.add(new StoreItem(itemId, itemName,storeName, storePrice, description)); // Use the ID here
             }
             StoreItemAdapter adapter = new StoreItemAdapter(this, storeItems);
             priceListView.setAdapter(adapter);

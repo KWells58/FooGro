@@ -116,7 +116,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             selectionArgs = new String[]{"%" + query + "%", storeName};
         }
         Log.d("DatabaseHelper", "Selection: " + selection + ", Args: " + Arrays.toString(selectionArgs));
-        Cursor cursor = db.query("Products", columns, selection, selectionArgs, null, null, orderBy);
+        Cursor cursor = db.query("Products", columns, selection, selectionArgs, null, null, orderBy, "1");
 
         // Log the results for debugging purposes
         if (cursor != null) {
@@ -129,11 +129,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public Cursor searchProductInStore(String itemName, String storeName) {
         SQLiteDatabase db = this.getReadableDatabase();
         String[] columns = {"id AS _id", "name", "category", "price", "storeName", "storeID", "description"};
-        String selection = "name LIKE ? AND storeName = ?";
-        String[] selectionArgs = new String[]{"%" + itemName + "%", storeName};
+        String selection;
+        String[] selectionArgs;
+
+        if (storeName != null) {
+            selection = "name LIKE ? AND storeName = ?";
+            selectionArgs = new String[]{"%" + itemName + "%", storeName};
+        } else {
+            selection = "name LIKE ?";
+            selectionArgs = new String[]{"%" + itemName + "%"};
+        }
 
         return db.query("Products", columns, selection, selectionArgs, null, null, null);
     }
+
 
 
     public void addToCart(int productId, String productName, double productPrice, int quantity) {
@@ -149,6 +158,33 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Log.d("DatabaseHelper", "Added to cart: " + productName);
         db.close(); // Closing database connection
     }
+
+
+    public Cursor searchStoresForItem(String query, String storeName) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String[] columns = {"id AS _id", "name", "storeName"}; // Get distinct store names
+        String selection = "name LIKE ?";
+        String[] selectionArgs = new String[]{"%" + query + "%"};
+        String orderBy = "name ASC, storeName ASC";
+
+        if (storeName != null && !storeName.isEmpty()) {
+            // If storeName is provided, filter the results
+            selection += " AND storeName = ?";
+            selectionArgs = new String[]{"%" + query + "%", storeName};
+        }
+
+        Log.d("DatabaseHelper", "Search Stores For Item - Query: " + query + ", Store: " + storeName);
+        Cursor cursor = db.query("Products", columns, selection, selectionArgs, null, null, orderBy, "1");
+
+        //log results for debugging purposes
+        if (cursor != null) {
+            int count = cursor.getCount();
+            Log.d("DatabaseHelper", "searchSingleProduct - Query: " + query + ", Store: " + storeName + ", Result Count: " + count);
+        }
+        return cursor;
+    }
+
+
 
 
 

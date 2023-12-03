@@ -3,6 +3,7 @@ package edu.floridapoly.mobiledeviceapps.fall23.foogro_1;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 public class StoreItemAdapter extends ArrayAdapter<StoreItem> {
+    private boolean fromStandardSearch;
 
     static class ViewHolder {
         TextView storeItemNameTextView;
@@ -22,6 +24,7 @@ public class StoreItemAdapter extends ArrayAdapter<StoreItem> {
 
     public StoreItemAdapter(Context context, ArrayList<StoreItem> storeItems) {
         super(context, 0, storeItems);
+        this.fromStandardSearch = fromStandardSearch;
     }
 
     @Override
@@ -61,8 +64,12 @@ public class StoreItemAdapter extends ArrayAdapter<StoreItem> {
         SharedPreferences sharedPreferences = getContext().getSharedPreferences("CartPreferences", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
+        // Use the store name associated with the clicked item
+        String storeName = storeItem.getStoreName() != null ? storeItem.getStoreName() : "DefaultStore";
+        Log.d("ItemDetailsActivity", "Adding to cart - Item: " + storeItem.getItemName() + ", Store: " + storeName);
+
         editor.putString("cartItem_" + storeItem.getId() + "_itemName", storeItem.getItemName());
-        editor.putString("cartItem_" + storeItem.getId() + "_storeName", storeItem.getStoreName());
+        editor.putString("cartItem_" + storeItem.getId() + "_storeName", storeName);
         editor.putFloat("cartItem_" + storeItem.getId() + "_price", (float) storeItem.getStorePrice());
         editor.putString("cartItem_" + storeItem.getId() + "_description", storeItem.getDescription()); // Storing description
 

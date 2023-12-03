@@ -52,45 +52,84 @@ public class Item_Search_Screen extends AppCompatActivity {
 
     private void performSearch(String storeName, String query) {
         if (!query.isEmpty()) {
-            showToast("Searching for: " + query + " in " + storeName);
-            // Run database operation in a background thread to avoid blocking the UI
-            new Thread(() -> {
-                Cursor cursor = dbHelper.searchSingleProduct(query, storeName);
+            if (storeName == null) {
+                showToast("Searching for: " + query + " in the entire database");
+                // Run database operation in a background thread to avoid blocking the UI
+                new Thread(() -> {
+                    Cursor cursor = dbHelper.searchStoresForItem(query, null);
 
-                if (cursor != null) {
-                    // Continue with the rest of the adapter setup
-                    String[] fromColumns = new String[]{"name"}; // column name to display
-                    int[] toViews = new int[]{android.R.id.text1}; // The TextView in simple_list_item_1.xml
+                    if (cursor != null) {
+                        // Continue with the rest of the adapter setup
+                        String[] fromColumns = new String[]{"name"}; // column name to display
+                        int[] toViews = new int[]{android.R.id.text1}; // The TextView in simple_list_item_1.xml
 
-                    SimpleCursorAdapter adapter = new SimpleCursorAdapter(
-                            context,
-                            android.R.layout.simple_list_item_1, // Layout for individual rows
-                            cursor,
-                            fromColumns,
-                            toViews,
-                            0);
+                        SimpleCursorAdapter adapter = new SimpleCursorAdapter(
+                                context,
+                                android.R.layout.simple_list_item_1, // Layout for individual rows
+                                cursor,
+                                fromColumns,
+                                toViews,
+                                0);
 
-                    searchResults.setOnItemClickListener((parent, view, position, id) -> {
-                        Cursor clickedItemCursor = (Cursor) parent.getItemAtPosition(position);
-                        if (clickedItemCursor != null && clickedItemCursor.moveToPosition(position)) {
-                            String itemId = clickedItemCursor.getString(clickedItemCursor.getColumnIndexOrThrow("_id"));
-                            Intent intent = new Intent(context, ItemDetailsActivity.class);
-                            intent.putExtra("itemId", itemId);
-                            intent.putExtra("storeName", storeName);
-                            intent.putExtra("fromStandardSearch", true);
-                            startActivity(intent);
-                        }
-                    });
+                        searchResults.setOnItemClickListener((parent, view, position, id) -> {
+                            Cursor clickedItemCursor = (Cursor) parent.getItemAtPosition(position);
+                            if (clickedItemCursor != null && clickedItemCursor.moveToPosition(position)) {
+                                String itemId = clickedItemCursor.getString(clickedItemCursor.getColumnIndexOrThrow("_id"));
+                                String sname = clickedItemCursor.getString(clickedItemCursor.getColumnIndexOrThrow("storeName"));
+                                Intent intent = new Intent(context, ItemDetailsActivity.class);
+                                intent.putExtra("itemId", itemId);
+                                intent.putExtra("storeName", sname);
+                                intent.putExtra("fromStandardSearch", true);
+                                startActivity(intent);
+                            }
+                        });
 
-                    runOnUiThread(() -> searchResults.setAdapter(adapter));
-                } else {
-                    runOnUiThread(() -> showToast("No results found"));
-                }
-            }).start();
+                        runOnUiThread(() -> searchResults.setAdapter(adapter));
+                    } else {
+                        runOnUiThread(() -> showToast("No results found"));
+                    }
+                }).start();
+            } else {
+                showToast("Searching for: " + query + " in " + storeName);
+                // Run database operation in a background thread to avoid blocking the UI
+                new Thread(() -> {
+                    Cursor cursor = dbHelper.searchSingleProduct(query, storeName);
+
+                    if (cursor != null) {
+                        // Continue with the rest of the adapter setup
+                        String[] fromColumns = new String[]{"name"}; // column name to display
+                        int[] toViews = new int[]{android.R.id.text1}; // The TextView in simple_list_item_1.xml
+
+                        SimpleCursorAdapter adapter = new SimpleCursorAdapter(
+                                context,
+                                android.R.layout.simple_list_item_1, // Layout for individual rows
+                                cursor,
+                                fromColumns,
+                                toViews,
+                                0);
+
+                        searchResults.setOnItemClickListener((parent, view, position, id) -> {
+                            Cursor clickedItemCursor = (Cursor) parent.getItemAtPosition(position);
+                            if (clickedItemCursor != null && clickedItemCursor.moveToPosition(position)) {
+                                String itemId = clickedItemCursor.getString(clickedItemCursor.getColumnIndexOrThrow("_id"));
+                                Intent intent = new Intent(context, ItemDetailsActivity.class);
+                                intent.putExtra("itemId", itemId);
+                                intent.putExtra("storeName", storeName);
+                                startActivity(intent);
+                            }
+                        });
+
+                        runOnUiThread(() -> searchResults.setAdapter(adapter));
+                    } else {
+                        runOnUiThread(() -> showToast("No results found"));
+                    }
+                }).start();
+            }
         } else {
             showToast("Please enter a search query.");
         }
     }
+
 
 
     private void showToast(String message) {

@@ -5,5 +5,7 @@
         <item name="colorPrimaryDark">#50B17C</item>
         <item name="colorAccent">@color/white</item>
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+
+        <item name="android:textColor">@color/white</item>
     </style>
 </resources>

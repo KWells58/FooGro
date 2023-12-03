@@ -9,7 +9,7 @@
         android:id="@+id/itemNameTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Store Name"
+        android:text="Product Name: "
         android:textSize="18sp"
         android:layout_marginTop="16dp"
         android:layout_marginStart="16dp"/>
