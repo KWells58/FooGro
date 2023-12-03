@@ -69,4 +69,5 @@ public class StoreItemAdapter extends ArrayAdapter<StoreItem> {
         editor.apply();
     }
 
+
 }

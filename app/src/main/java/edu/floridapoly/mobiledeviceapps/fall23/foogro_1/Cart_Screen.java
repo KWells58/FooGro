@@ -4,8 +4,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.ListView;
 import androidx.appcompat.app.AppCompatActivity;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,20 +31,17 @@ public class Cart_Screen extends AppCompatActivity {
         List<CartItem> cartItems = new ArrayList<>();
         SharedPreferences sharedPreferences = getSharedPreferences("CartPreferences", MODE_PRIVATE);
 
-        // Retrieve all keys and values from SharedPreferences
         Map<String, ?> allEntries = sharedPreferences.getAll();
         for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
-            if (entry.getKey().contains("cartItem_")) {
-                // Splitting the key to extract the ID part
-                String[] keyParts = entry.getKey().split("_");
-                if (keyParts.length > 1 && keyParts[2].equals("storeName")) {
-                    // Using the ID to retrieve the price
-                    float price = sharedPreferences.getFloat("cartItem_" + keyParts[1] + "_price", 0.0f);
-                    cartItems.add(new CartItem(entry.getValue().toString(), price, ""));
-                }
+            if (entry.getKey().contains("cartItem_") && entry.getKey().endsWith("_storeName")) {
+                String storeName = (String) entry.getValue();
+                // Extract the item ID from the key
+                String itemId = entry.getKey().split("_")[1];
+                // Use the item ID to retrieve the price
+                float price = sharedPreferences.getFloat("cartItem_" + itemId + "_price", 0.0f);
+                cartItems.add(new CartItem(storeName, price, "")); // The location is set as an empty string for now
             }
         }
         return cartItems;
     }
-
 }
