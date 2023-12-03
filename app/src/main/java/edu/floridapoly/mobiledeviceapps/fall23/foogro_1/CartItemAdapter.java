@@ -23,13 +23,14 @@ public class CartItemAdapter extends ArrayAdapter<CartItem> {
         if (cartItem != null) {
             TextView itemNameTextView = convertView.findViewById(R.id.itemNameTextView);
             TextView itemPriceTextView = convertView.findViewById(R.id.itemPriceTextView);
-            TextView itemLocationTextView = convertView.findViewById(R.id.itemLocationTextView);
+            TextView storeNameTextView = convertView.findViewById(R.id.storeNameTextView); // Changed the ID here
 
             itemNameTextView.setText(cartItem.getItemName());
             itemPriceTextView.setText(String.format("$%.2f", cartItem.getItemPrice()));
-            itemLocationTextView.setText("Location: " + cartItem.getItemLocation());
+            storeNameTextView.setText(cartItem.getStoreName()); // Changed the method here
         }
 
         return convertView;
     }
+
 }

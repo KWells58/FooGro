@@ -3,12 +3,12 @@ package edu.floridapoly.mobiledeviceapps.fall23.foogro_1;
 public class CartItem {
     private String itemName;
     private double itemPrice;
-    private String itemLocation;
+    private String storeName;
 
-    public CartItem(String itemName, double itemPrice, String itemLocation) {
+    public CartItem(String itemName, double itemPrice, String storeName) {
         this.itemName = itemName;
         this.itemPrice = itemPrice;
-        this.itemLocation = itemLocation;
+        this.storeName = storeName;
     }
 
     public String getItemName() {
@@ -19,7 +19,7 @@ public class CartItem {
         return itemPrice;
     }
 
-    public String getItemLocation() {
-        return itemLocation;
+    public String getStoreName() {
+        return storeName;
     }
 }

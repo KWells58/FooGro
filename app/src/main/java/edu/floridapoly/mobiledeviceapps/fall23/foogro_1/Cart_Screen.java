@@ -35,13 +35,13 @@ public class Cart_Screen extends AppCompatActivity {
         for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
             if (entry.getKey().contains("cartItem_") && entry.getKey().endsWith("_storeName")) {
                 String storeName = (String) entry.getValue();
-                // Extract the item ID from the key
                 String itemId = entry.getKey().split("_")[1];
-                // Use the item ID to retrieve the price
+                String itemName = sharedPreferences.getString("cartItem_" + itemId + "_itemName", "Unknown Item"); // Get the item name
                 float price = sharedPreferences.getFloat("cartItem_" + itemId + "_price", 0.0f);
-                cartItems.add(new CartItem(storeName, price, "")); // The location is set as an empty string for now
+                cartItems.add(new CartItem(itemName, price, storeName)); // Now using itemName for the first parameter
             }
         }
         return cartItems;
     }
+
 }

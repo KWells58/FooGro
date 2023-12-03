@@ -1,14 +1,16 @@
 package edu.floridapoly.mobiledeviceapps.fall23.foogro_1;
 
 public class StoreItem {
-    private int id; // ID field is now an integer
+    private int id;
+    private String itemName;
     private String storeName;
     private double storePrice;
     private String description;
 
-    public StoreItem(int id, String storeName, double storePrice, String description) {
+    public StoreItem(int id, String itemName,String storeName, double storePrice, String description) {
         this.id = id; // Initialize the ID field
         this.storeName = storeName;
+        this.itemName = itemName;
         this.storePrice = storePrice;
         this.description = description;
     }
@@ -21,6 +23,10 @@ public class StoreItem {
     // Getter for the store name
     public String getStoreName() {
         return storeName;
+    }
+
+    public String getItemName() {
+        return itemName;
     }
 
     // Getter for the store price

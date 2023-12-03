@@ -61,13 +61,16 @@ public class StoreItemAdapter extends ArrayAdapter<StoreItem> {
         SharedPreferences sharedPreferences = getContext().getSharedPreferences("CartPreferences", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
-        // Store each property of the StoreItem in SharedPreferences
+        editor.putString("cartItem_" + storeItem.getId() + "_itemName", storeItem.getItemName());
         editor.putString("cartItem_" + storeItem.getId() + "_storeName", storeItem.getStoreName());
         editor.putFloat("cartItem_" + storeItem.getId() + "_price", (float) storeItem.getStorePrice());
+        editor.putString("cartItem_" + storeItem.getId() + "_description", storeItem.getDescription()); // Storing description
 
-        // Commit the changes
         editor.apply();
     }
+
+
+
 
 
 }
