@@ -22,4 +22,10 @@ public class CartItem {
     public String getStoreName() {
         return storeName;
     }
+
+    // Method for unique identifier
+    public String getItemId() {
+        // Using item price as the identifier
+        return String.valueOf(itemPrice);
+    }
 }
