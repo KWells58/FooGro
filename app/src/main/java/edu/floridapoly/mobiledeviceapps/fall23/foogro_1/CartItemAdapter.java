@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class CartItemAdapter extends ArrayAdapter<CartItem> {
@@ -50,48 +52,69 @@ public class CartItemAdapter extends ArrayAdapter<CartItem> {
 
     private void removeItem(int position) {
         try {
-        // Get the item to be removed
-        CartItem itemToRemove = getItem(position);
+            // Get the item to be removed
+            CartItem itemToRemove = getItem(position);
 
-        if(itemToRemove != null) {
-            Log.d("RemoveItem", "Removing Item: " + itemToRemove.getItemName());
-            // Remove the item from SharedPreferences
-            SharedPreferences sharedPreferences = getContext().getSharedPreferences("CartPreferences", Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
+            if(itemToRemove != null) {
+                Log.d("RemoveItem", "Removing Item: " + itemToRemove.getItemName());
+                // Remove the item from SharedPreferences
+                SharedPreferences sharedPreferences = getContext().getSharedPreferences("CartPreferences", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
 
-            // Assuming itemID is a unique identifier for each item which it is
-            String itemId = getItemId(itemToRemove);
+                // Assuming itemID is a unique identifier for each item which it is
+                int itemId = itemToRemove.getItemId();
+
+                // Log statements for debugging
+                Log.d("RemoveItem", "Before removal: " + sharedPreferences.getAll());
+
+                // Remove all entries related to the item from shared preferences
+                editor.remove("cartItem_" + itemId + "_itemName");
+                editor.remove("cartItem_" + itemId + "_price");
+                editor.remove("cartItem_" + itemId + "_storeName");
+                editor.remove("cartItem_" + itemId + "_description");
 
 
-            // Log statements for debugging
-            Log.d("RemoveItem", "Before removal: " + sharedPreferences.getAll());
-            // Remove all entries related to the item from SharedPreferences
-            editor.remove("cartItem_" + itemId + "_itemName");
-            editor.remove("cartItem_" + itemId + "_price");
-            editor.remove("cartItem_" + itemId + "_storeName");
+                // Commit the changes
+                editor.apply();
 
-            // Commit the changes
-            editor.apply();
+                // Log statements for debugging
+                Log.d("RemoveItem", "After removal: " + sharedPreferences.getAll());
 
-            // Log statements for debugging
-            Log.d("RemoveItem", "After removal: " + sharedPreferences.getAll());
+                // Remove the item from the adapters data set
+                remove(itemToRemove);
 
-            // Remove the item from the adapters data set
-            remove(itemToRemove);
-
-            // Notify the adapter to update the ui
-            notifyDataSetChanged();
-            Log.d("RemoveItem", "Item removed successfully");
-        }
-        }catch(Exception e) {
+                // Notify the adapter to update the ui
+                notifyDataSetChanged();
+                Log.d("RemoveItem", "Item removed successfully");
+            } else {
+                Log.d("RemoveItem", "Item to remove is null");
+            }
+        } catch(Exception e) {
             e.printStackTrace();
         }
     }
 
     // Method to get a unique identifier for a cart item
-    private String getItemId(CartItem cartItem) {
-
+    private int getItemId(CartItem cartItem) {
         return cartItem.getItemId();
+    }
+
+
+    public List<CartItem> getItems() {
+        int count = getCount();
+        List<CartItem> items = new ArrayList<>(count);
+        for (int i = 0; i < count; i++) {
+            items.add(getItem(i));
+        }
+        return items;
+    }
+
+    // Add this method to remove all items from the adapter
+    public void removeAll(List<CartItem> items) {
+        for (CartItem item : items) {
+            remove(item);
+        }
+        notifyDataSetChanged(); // Notify the adapter that the data set has changed
     }
 
 }

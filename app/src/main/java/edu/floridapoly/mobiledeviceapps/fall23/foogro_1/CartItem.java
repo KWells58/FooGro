@@ -4,11 +4,13 @@ public class CartItem {
     private String itemName;
     private double itemPrice;
     private String storeName;
+    private int ItemId;
 
-    public CartItem(String itemName, double itemPrice, String storeName) {
+    public CartItem(String itemName, double itemPrice, String storeName, int ItemId) {
         this.itemName = itemName;
         this.itemPrice = itemPrice;
         this.storeName = storeName;
+        this.ItemId = ItemId;
     }
 
     public String getItemName() {
@@ -24,8 +26,8 @@ public class CartItem {
     }
 
     // Method for unique identifier
-    public String getItemId() {
+    public int getItemId() {
         // Using item price as the identifier
-        return String.valueOf(itemPrice);
+        return ItemId;
     }
 }
