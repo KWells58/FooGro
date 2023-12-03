@@ -63,7 +63,7 @@ public class FoodItemAdapter extends RecyclerView.Adapter<FoodItemAdapter.ViewHo
                     itemStateArray.put(adapterPosition, true);
                 } else {
                     checkBox.setChecked(false);
-                    itemStateArray.put(adapterPosition, false);
+                    itemStateArray.put(adapterPosition, false):
                 }
             });
         }
