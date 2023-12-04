@@ -1,8 +1,12 @@
 package edu.floridapoly.mobiledeviceapps.fall23.foogro_1;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
@@ -11,6 +15,8 @@ import java.util.Map;
 
 public class Cart_Screen extends AppCompatActivity {
     private CartItemAdapter cartItemAdapter;
+
+    private StringBuilder recipeIngredients;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +58,10 @@ public class Cart_Screen extends AppCompatActivity {
                 }
             }
         });
+
+        // Create Recipe Button Click Listener
+        Button createRecipeButton = findViewById(R.id.createRecipeButton);
+        createRecipeButton.setOnClickListener(view -> createRecipe());
     }
 
     @Override
@@ -67,6 +77,28 @@ public class Cart_Screen extends AppCompatActivity {
 
         super.onDestroy();
     }
+
+    private void createRecipe() {
+        // Get the list of items in the cart
+        List<CartItem> cartItems = cartItemAdapter.getItems();
+
+        // Create a string containing the names of items
+        StringBuilder recipeIngredients = new StringBuilder("Recipe Ingredients:\n");
+        for (CartItem item : cartItems) {
+            recipeIngredients.append("- ").append(item.getItemName()).append("\n");
+        }
+
+        // Use the string to create a recipe with AI
+        generateRecipeWithAI(recipeIngredients.toString());
+    }
+
+    private void generateRecipeWithAI(String recipeIngredients) {
+        // Use the string to create a recipe with AI
+        OpenAiRequest openAiRequest = new OpenAiRequest(this);
+        openAiRequest.execute(recipeIngredients);
+    }
+
+
 
     private List<CartItem> loadCartItems() {
         List<CartItem> cartItems = new ArrayList<>();
@@ -90,6 +122,7 @@ public class Cart_Screen extends AppCompatActivity {
                 }
             }
         }
+
 
         // Iterate through existing adapter items and remove the ones not present
         List<CartItem> itemsToRemove = new ArrayList<>();
