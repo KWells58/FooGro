@@ -17,7 +17,7 @@ import com.google.gson.Gson;
 
 public class OpenAiRequest extends AsyncTask<String, Void, String> {
 
-    private static final String API_KEY = "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";
+    private static final String API_KEY = "API_Key";
     private static final String OPENAI_API_URL = "https://api.openai.com/v1/engines/text-davinci-003/completions";
     private Context context;
 
